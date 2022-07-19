@@ -15,7 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from innotter import settings
+from django.conf.urls import static
+from page.views import *
+from user.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', index),
+    path('login/', log_in)
 ]
+
+# if settings.DEBUG:
+    # urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+
