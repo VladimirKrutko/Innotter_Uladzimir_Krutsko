@@ -1,17 +1,19 @@
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin, BaseUserManager
 from django.db import models
+from jsonschema import ValidationError
+import jwt
+from datetime import datetime, timedelta
+from django.conf import settings
+
 
 
 class MyUserManager(BaseUserManager):
     
     """
     Class with function for create user and super_user
-
-    Args:
-        BaseUserManager: django class
     """
     
-    def create_user(self, email, title, password, **kwargs):
+    def create_user(self, email, title, password, role = 'user', **kwargs):
         """
         Base function for create user
 
@@ -24,9 +26,18 @@ class MyUserManager(BaseUserManager):
             user object
         """
         
+        if email is None:
+            raise TypeError('Input user email please')
+        
+        if password is None:
+            raise TypeError('Input password please')
+        
+        
+        
         user = self.model(
             email = self.normalize_email(email),
             title = title,
+            role = role,
             **kwargs
             )
         user.set_password(password)
@@ -45,9 +56,16 @@ class MyUserManager(BaseUserManager):
         Returns:
             user object
         """
+        if email is None:
+            raise TypeError('Input user email please')
+        
+        if password is None:
+            raise TypeError('Input password please')
+        
         kwargs.setdefault('is_staff', True)
         kwargs.setdefault('is_superuser', True)
-        kwargs.setdefault('is_active', True)
+        # kwargs.setdefault('is_active', True)
+        kwargs.setdefault('role', 'admin')
         
         user = self.create_user(
             email = self.normalize_email(email),
@@ -55,6 +73,7 @@ class MyUserManager(BaseUserManager):
             password = password,
             **kwargs
         )
+        user.save()
         
         return user
         
@@ -78,8 +97,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     create_data = models.DateTimeField(auto_now=True)
     last_login = models.DateTimeField(auto_now=True)
     is_blocked = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
     
     objects = MyUserManager()
     
@@ -87,9 +106,30 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['title']
     
     def __str__(self) -> str:
-        return self.email
+        return self.email 
     
     def get_role(self) -> str:
         return self.role
+        
+        
+    
+    @property
+    def token(self):
+        return self._generate_jwt_token()
+    
+    def _generate_jwt_token(self):
+        
+        dt = datetime.now() + timedelta(days=1)
+        
+        token = jwt.encode({
+            'id': self.pk,
+            'exp': int(dt.strftime('%s'))
+        }, settings.SECRET_KEY, algorithm='HS256')
+
+        return token 
+
+
+     
+    
         
     
