@@ -7,6 +7,7 @@ services:
         # python innotter/manage.py migrate
         # command: python innotter/manage.py makemigrations
         command: bash -c "python innotter/manage.py makemigrations user && python innotter/manage.py makemigrations page && python innotter/manage.py migrate && python innotter/manage.py runserver 0.0.0.0:8000"
+        # command: entrypoint.sh
         volumes:
             - .:/usr/src/app
         ports:
