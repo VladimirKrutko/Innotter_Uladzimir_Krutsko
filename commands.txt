@@ -11,6 +11,7 @@ docker exec -it postgres psql -U postgres
 \d
 \d+ <table_name>
 \q
+docker-compose up --build --force-recreate 
 
 
 ==========

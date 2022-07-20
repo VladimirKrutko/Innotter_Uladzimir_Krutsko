@@ -14,3 +14,4 @@ class UserJSONRenderer(JSONRenderer):
         return json.dumps({
             'user': data
         })
+        
