@@ -68,8 +68,9 @@ class LoginAPIView(APIView):
 
 class UploadImageAPIView(APIView):
     # permission_classes = (IsAuthenticated,)
-    parser_classes = (MultiPartParser, )
-    renderer_classes =  None
+    parser_classes = (MultiPartParser,)
+    renderer_classes = None
+
     def post(self, request, format=None):
         """
         _summary_
