@@ -1,32 +1,17 @@
 from rest_framework import status
-from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser
+from rest_framework.viewsets import ModelViewSet
 from .models import User
 from rest_framework.serializers import ValidationError
-from .serializers import LoginSerializer, UserSerializer
+from user.serializers import LoginSerializer, UserSerializer
 from .renderers import UserJSONRenderer
 from django.conf import settings
 
 
-class ManagerPermission(BasePermission):
-    """
-    Class with manager permission
-    """
-
-    def has_permission(self, request, view):
-        if request.user.role == 'moderator':
-            return True
-        return False
-
-    def has_object_permission(self, request, view, obj):
-        if (obj.author != request.user) and (request.user.role == 'moderator'):
-            return True
-        return False
-
-
-class UserAPIView(APIView):
+class UserAPIView(ModelViewSet):
     """
     Class that realize functionality for register new user
     """

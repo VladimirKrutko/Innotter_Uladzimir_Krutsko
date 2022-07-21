@@ -4,19 +4,13 @@ from user.models import User
 from page.serializers import PageSerializer
 
 
-class UserSerializer(serializers.Serializer):
+class UserSerializer(serializers.ModelSerializer):
     """
     Class for registration new users in system
     """
-    email = serializers.CharField(max_length=200)
-    username = serializers.CharField(max_length=200)
-    password = serializers.CharField(
-        max_length=128,
-        min_length=8,
-        write_only=True
-    )
-    token = serializers.CharField(max_length=255, read_only=True)
-    image_s3_path = serializers.CharField(max_length=200, default=None)
+    class Meta:
+        model = User
+        fields = '__all__'
 
     def validate(self, data):
         """
