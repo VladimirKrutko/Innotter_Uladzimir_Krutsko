@@ -72,7 +72,6 @@ class UpdateAPIView(APIView):
     serializer_class = (UpdateUserSerializer,)
 
     def post(self, request):
-        self.
         user = request.data.get('user', {})
         serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
