@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from .models import User, UploadImage
-from ..page.serializers import PageSerialize
+from ..page.serializers import PageSerializer
 
 
 class UserRegistration(serializers.ModelSerializer):
@@ -19,7 +19,7 @@ class UserRegistration(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['email', 'username', 'password', 'token']
+        fields = ('email', 'username', 'password', 'token')
 
     def validate(self, data):
         """
@@ -39,7 +39,7 @@ class UserRegistration(serializers.ModelSerializer):
         user.save()
         page_data = {'owner': user.id,
                      'name': user.username}
-        PageSerialize(data=page_data)
+        PageSerializer(data=page_data)
 
         return user
 
@@ -90,7 +90,14 @@ class LoginSerializer(serializers.Serializer):
         }
 
 
-class ImageSerializer(serializers.Serializer):
+class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UploadImage
-        fields = ['image', 'name']
+        model = User
+        fields = ('email', 'image_s3_path', 'username', 'password')
+
+    def update(self, instance, validated_data):
+        for field in validated_data.keys():
+            if validated_data[field] != instance[field]:
+                instance[field] = validated_data[field]
+        instance.save()
+        return instance

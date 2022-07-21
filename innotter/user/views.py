@@ -3,8 +3,9 @@ from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser
+from rest_framework.serializers import ValidationError
 
-from .serializers import LoginSerializer, UserRegistration, ImageSerializer
+from .serializers import LoginSerializer, UserRegistration, UpdateUserSerializer
 from .renderers import UserJSONRenderer
 from django.conf import settings
 
@@ -64,6 +65,24 @@ class LoginAPIView(APIView):
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UpdateAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = (UpdateUserSerializer,)
+
+    def post(self, request):
+        self.
+        user = request.data.get('user', {})
+        serializer = self.serializer_class(data=request.data)
+        if not serializer.is_valid():
+            raise ValidationError('Something go wrong')
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+
+
 
 
 class UploadImageAPIView(APIView):
