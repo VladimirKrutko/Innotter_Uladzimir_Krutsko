@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from .models import User, UploadImage
+from ..page.serializers import PageSerialize
 
 
 class UserRegistration(serializers.ModelSerializer):
@@ -36,10 +37,11 @@ class UserRegistration(serializers.ModelSerializer):
         user = User(**validated_data)
         user.set_password(validated_data['password'])
         user.save()
+        page_data = {'owner': user.id,
+                     'name': user.username}
+        PageSerialize(data=page_data)
+
         return user
-
-
-
 
 
 class LoginSerializer(serializers.Serializer):
@@ -87,8 +89,8 @@ class LoginSerializer(serializers.Serializer):
             'token': user.token
         }
 
-class ImageSerializer(serializers.Serializer):
 
+class ImageSerializer(serializers.Serializer):
     class Meta:
         model = UploadImage
         fields = ['image', 'name']
