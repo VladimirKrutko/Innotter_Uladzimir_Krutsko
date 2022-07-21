@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Page, Tag
-from ..user.models import User
+from user.models import User
 from rest_framework.serializers import ValidationError
 
 

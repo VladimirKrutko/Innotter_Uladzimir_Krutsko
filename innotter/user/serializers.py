@@ -1,10 +1,10 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from .models import User, UploadImage
-from ..page.serializers import PageSerializer
+from user.models import User
+from page.serializers import PageSerializer
 
 
-class UserRegistration(serializers.ModelSerializer):
+class UserSerializer(serializers.Serializer):
     """
     Class for registration new users in system
     """
@@ -16,10 +16,7 @@ class UserRegistration(serializers.ModelSerializer):
         write_only=True
     )
     token = serializers.CharField(max_length=255, read_only=True)
-
-    class Meta:
-        model = User
-        fields = ('email', 'username', 'password', 'token')
+    image_s3_path = serializers.CharField(max_length=200, default=None)
 
     def validate(self, data):
         """
@@ -42,6 +39,16 @@ class UserRegistration(serializers.ModelSerializer):
         PageSerializer(data=page_data)
 
         return user
+
+    def update(self, instance, validated_data):
+        if not authenticate(username=validated_data['email'],
+                            password=validated_data['password']):
+            raise serializers.ValidationError('input incorrect data for user')
+
+        instance.image_s3_path = validated_data['image_s3_path']
+        instance.save()
+
+        return instance
 
 
 class LoginSerializer(serializers.Serializer):
@@ -90,14 +97,3 @@ class LoginSerializer(serializers.Serializer):
         }
 
 
-class UpdateUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('email', 'image_s3_path', 'username', 'password')
-
-    def update(self, instance, validated_data):
-        for field in validated_data.keys():
-            if validated_data[field] != instance[field]:
-                instance[field] = validated_data[field]
-        instance.save()
-        return instance

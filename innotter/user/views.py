@@ -3,9 +3,9 @@ from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser
+from .models import User
 from rest_framework.serializers import ValidationError
-
-from .serializers import LoginSerializer, UserRegistration, UpdateUserSerializer
+from .serializers import LoginSerializer, UserSerializer
 from .renderers import UserJSONRenderer
 from django.conf import settings
 
@@ -26,12 +26,12 @@ class ManagerPermission(BasePermission):
         return False
 
 
-class RegistrationAPIView(APIView):
+class UserAPIView(APIView):
     """
     Class that realize functionality for register new user
     """
     permission_classes = (AllowAny,)
-    serializer_class = UserRegistration
+    serializer_class = UserSerializer
     renderer_classes = (UserJSONRenderer,)
 
     def post(self, request):
@@ -51,6 +51,19 @@ class RegistrationAPIView(APIView):
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+    def put(self, request, *args, **kwargs):
+
+        data = request.data.get('user')
+        try:
+            instance = User.objects.get(email=data['email'])
+        except:
+            raise ValidationError('please input email')
+
+        serializer = self.serializer_class(data=data, instance=instance)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class LoginAPIView(APIView):
     """
@@ -65,23 +78,6 @@ class LoginAPIView(APIView):
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-class UpdateAPIView(APIView):
-    permission_classes = (IsAuthenticated,)
-    serializer_class = (UpdateUserSerializer,)
-
-    def post(self, request):
-        user = request.data.get('user', {})
-        serializer = self.serializer_class(data=request.data)
-        if not serializer.is_valid():
-            raise ValidationError('Something go wrong')
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-
-
-
 
 
 class UploadImageAPIView(APIView):
