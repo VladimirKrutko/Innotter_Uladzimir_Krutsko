@@ -8,4 +8,5 @@ COPY entrypoint.sh /usr/src/app
 
 RUN pip install -r requarements.txt
 RUN chmod +x entrypoint.sh
+RUN ./entrypoint.sh
 

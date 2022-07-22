@@ -4,4 +4,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 WORKDIR /usr/src/app
 
 COPY upload_photo.py ./
-RUN 
+COPY requarements.txt ./
+RUN pip install -r requarements.txt
+RUN  uvicorn upload_photo:app --reload --port 8080:8080
+
