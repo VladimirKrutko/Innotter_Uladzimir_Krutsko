@@ -1,0 +1,7 @@
+FROM python:3.10.5
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+WORKDIR /usr/src/app
+
+COPY upload_photo.py ./
+RUN 
