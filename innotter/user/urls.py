@@ -1,11 +1,10 @@
 from django.urls import path
-from .views import LoginAPIView, UserAPIView, UploadImageAPIView
+from .views import LoginAPIView, UserAPIView
 
 app_name = 'user'
 
 urlpatterns = [
-    path('registration/', UserAPIView.as_view()),
+    path('registration/', UserAPIView.as_view({'post': 'post'})),
     path('login/', LoginAPIView.as_view()),
-    path('upload/', UploadImageAPIView.as_view()),
-    path('update/', UserAPIView.as_view())
+    path('update/', UserAPIView.as_view({'put': 'put'}))
 ]

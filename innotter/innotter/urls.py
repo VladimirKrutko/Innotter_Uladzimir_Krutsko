@@ -17,13 +17,15 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 from user.views import UserAPIView
-router = routers.SimpleRouter()
-router.registry(r'user', UserAPIView)
-
+# router = routers.SimpleRouter()
+# router.registry(r'user', UserAPIView)
+# path('api/', include(router.urls))router = routers.SimpleRouter()
+# router.registry(r'user', UserAPIView)
+# path('api/', include(router.urls))
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls))
+    path('user/', include('user.urls', namespace='user'))
 ]
 
 # if settings.DEBUG:

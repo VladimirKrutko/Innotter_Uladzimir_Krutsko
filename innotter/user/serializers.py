@@ -89,5 +89,3 @@ class LoginSerializer(serializers.Serializer):
             'username': user.title,
             'token': user.token
         }
-
-
