@@ -15,6 +15,7 @@ class Page(models.Model):
     tags = models.ManyToManyField(Tag, related_name='tag')
     owner = models.ForeignKey('user.User', on_delete=models.CASCADE, related_name='owner')
     followers = models.ManyToManyField('user.User', related_name='follows')
+    subscriptions = models.ManyToManyField('user.User', related_name='subscription')
     image = models.URLField(null=True, blank=True)
     is_private = models.BooleanField(default=False)
     follow_requests = models.ManyToManyField('user.User', related_name='requests')

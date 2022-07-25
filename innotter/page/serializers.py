@@ -31,3 +31,9 @@ class PageSerializer(serializers.ModelSerializer):
         instance.description = validated_data('description', instance.description)
         instance.save()
         return instance
+
+
+class PageSubscribe(serializers.ModelSerializer):
+    class Meta:
+        model = Page
+        fields = ['follow_requests', 'name', 'owner', 'followers', 'is_private', ]
