@@ -21,7 +21,6 @@ class User(AbstractUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=200)
     role = models.CharField(max_length=9, choices=Roles.choices, default='user')
-    title = models.CharField(max_length=80)
     create_data = models.DateTimeField(auto_now=True)
     last_login = models.DateTimeField(auto_now=True)
     is_blocked = models.BooleanField(default=False)

@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from .models import Page, Tag
-from ..user.models import User
+from page.models import Page, Tag
+from user.models import User
 from rest_framework.serializers import ValidationError
 
 
@@ -31,3 +31,4 @@ class PageSerializer(serializers.ModelSerializer):
         instance.description = validated_data('description', instance.description)
         instance.save()
         return instance
+

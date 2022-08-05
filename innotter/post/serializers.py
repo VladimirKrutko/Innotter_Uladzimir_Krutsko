@@ -21,3 +21,4 @@ class PostSerialize(serializers.ModelSerializer):
             instance.likes.add(validated_data.get('likes'))
         instance.save()
         return instance
+

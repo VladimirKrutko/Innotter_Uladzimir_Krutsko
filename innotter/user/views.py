@@ -2,12 +2,10 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.parsers import MultiPartParser
 from rest_framework.serializers import ValidationError
 
-from .serializers import LoginSerializer, UserRegistration, UpdateUserSerializer
-from .renderers import UserJSONRenderer
-from django.conf import settings
+from user.serializers import LoginSerializer, UserRegistration, UpdateUserSerializer
+from user.renderers import UserJSONRenderer
 
 
 class ManagerPermission(BasePermission):
@@ -78,28 +76,23 @@ class UpdateAPIView(APIView):
             raise ValidationError('Something go wrong')
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
-
-
-
-
-
-class UploadImageAPIView(APIView):
-    # permission_classes = (IsAuthenticated,)
-    parser_classes = (MultiPartParser,)
-    renderer_classes = None
-
-    def post(self, request, format=None):
-        """
-        _summary_
-
-        Args:
-            request (_type_): _description_
-        """
-        serializer = ImageSerializer(data=request.data)
-
-        image = serializer.data['image']
-        file_name = request.data.get('name')
-        image_link = settings.AWS_BASE_STORAGE + '/user-image/' + file_name
-        settings.S3_BUCKET.put_object(Key=image_link, Body=image)
-        return Response(image_link, status=status.HTTP_200_OK)
+#
+# class UploadImageAPIView(APIView):
+#     # permission_classes = (IsAuthenticated,)
+#     parser_classes = (MultiPartParser,)
+#     renderer_classes = None
+#
+#     def post(self, request, format=None):
+#         """
+#         _summary_
+#
+#         Args:
+#             request (_type_): _description_
+#         """
+#         serializer = ImageSerializer(data=request.data)
+#
+#         image = serializer.data['image']
+#         file_name = request.data.get('name')
+#         image_link = settings.AWS_BASE_STORAGE + '/user-image/' + file_name
+#         settings.S3_BUCKET.put_object(Key=image_link, Body=image)
+#         return Response(image_link, status=status.HTTP_200_OK)

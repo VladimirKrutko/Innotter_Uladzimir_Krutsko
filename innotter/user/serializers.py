@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from .models import User, UploadImage
-from ..page.serializers import PageSerializer
+from page.serializers import PageSerializer
 
 
 class UserRegistration(serializers.ModelSerializer):
@@ -45,19 +45,14 @@ class UserRegistration(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.Serializer):
-    """
-    Realise log in process
 
-    Raises:
-        serializers.ValidationError: raise this exception if some user data is not valid
-    """
     email = serializers.CharField(max_length=255)
     username = serializers.CharField(max_length=255, read_only=True)
     password = serializers.CharField(max_length=128, write_only=True)
     token = serializers.CharField(max_length=255, read_only=True)
 
     def validate(self, data):
-
+        print(data)
         email = data.get('email', None)
         password = data.get('password', None)
 
