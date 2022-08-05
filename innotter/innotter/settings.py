@@ -151,10 +151,5 @@ S3_BUCKET = S3_RESOURCE.Bucket(AWS_STORAGE_BUCKET_NAME)
 
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": (
-        "rest_framework.renderers.JSONRenderer"
-    ),
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ]
-
+        "rest_framework.renderers.JSONRenderer",)
 }

@@ -22,6 +22,7 @@ class PageSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         page = Page(**validated_data)
+        print('create_page')
         page.save()
         return page
 
@@ -31,4 +32,3 @@ class PageSerializer(serializers.ModelSerializer):
         instance.description = validated_data('description', instance.description)
         instance.save()
         return instance
-

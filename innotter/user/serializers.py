@@ -34,13 +34,13 @@ class UserRegistration(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
+        page_ser = PageSerializer()
         user = User(**validated_data)
         user.set_password(validated_data['password'])
         user.save()
-        page_data = {'owner': user.id,
+        page_data = {'owner': user,
                      'name': user.username}
-        PageSerializer(data=page_data)
-
+        page_ser.create(validated_data=page_data)
         return user
 
 
@@ -80,7 +80,7 @@ class LoginSerializer(serializers.Serializer):
 
         return {
             'email': user.email,
-            'username': user.title,
+            'username': user.username,
             'token': user.token
         }
 

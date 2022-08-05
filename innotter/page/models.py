@@ -21,5 +21,5 @@ class Page(models.Model):
     unblock_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return self.name + ' ' + self.owner
+        return self.name
 
