@@ -1,10 +1,10 @@
 from rest_framework.permissions import BasePermission
 
 
-class PostUpdatePermission(BasePermission):
+class PostUpdateDeletePermission(BasePermission):
 
     def has_object_permission(self, request, view, obj):
-        if obj.author == request.user:
+        if obj.author == request.user or request.role == 'admin' :
             return True
         else:
             return False

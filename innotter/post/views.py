@@ -21,8 +21,17 @@ class PostCreateView(APIView):
 
 class PostUpdateView(UpdateAPIView):
     serializer_class = PostSerialize
-    queryset = Post.objects.all()
     permission_classes = (PostUpdatePermission,)
+
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        instance = Post.objects.get(pk=pk)
+
+        serializer = PostSerialize(data=request.data, instance=instance)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer)
 
 
 class PostCRUDView(RetrieveUpdateDestroyAPIView):

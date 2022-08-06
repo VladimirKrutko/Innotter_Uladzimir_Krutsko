@@ -1,27 +1,10 @@
 from rest_framework import status
-from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.serializers import ValidationError
-
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from user.serializers import LoginSerializer, UserRegistration, UpdateUserSerializer
 from user.renderers import UserJSONRenderer
-
-
-class ManagerPermission(BasePermission):
-    """
-    Class with manager permission
-    """
-
-    def has_permission(self, request, view):
-        if request.user.role == 'moderator':
-            return True
-        return False
-
-    def has_object_permission(self, request, view, obj):
-        if (obj.author != request.user) and (request.user.role == 'moderator'):
-            return True
-        return False
 
 
 class RegistrationAPIView(APIView):
