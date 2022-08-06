@@ -34,13 +34,6 @@ class PostUpdateView(UpdateAPIView):
         return Response(serializer)
 
 
-class PostCRUDView(RetrieveUpdateDestroyAPIView):
-    serializer_class = PostSerialize
-    queryset = Post.objects.all()
-
-class PostDeleteView():
-    pass
-
 
 
 
