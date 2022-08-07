@@ -1,9 +1,10 @@
 from rest_framework.views import APIView
 from rest_framework.generics import UpdateAPIView, RetrieveUpdateDestroyAPIView
 from post.serializers import PostSerialize
-from post.permissions import PostUpdatePermission
+from post.permissions import PostUpdateDeletePermission
 from post.models import Post
 from rest_framework.response import Response
+from rest_framework.generics import get_object_or_404
 
 
 class PostCreateView(APIView):
@@ -11,7 +12,6 @@ class PostCreateView(APIView):
     serializer_class = PostSerialize
 
     def post(self, request):
-
         data = request.data.get('post')
         serializer = self.serializer_class(data=data)
         serializer.is_valid()
@@ -21,12 +21,11 @@ class PostCreateView(APIView):
 
 class PostUpdateView(UpdateAPIView):
     serializer_class = PostSerialize
-    permission_classes = (PostUpdatePermission,)
+    permission_classes = (PostUpdateDeletePermission,)
 
     def put(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
-        instance = Post.objects.get(pk=pk)
-
+        instance = get_object_or_404(Post.objects.all(), id=pk)
         serializer = PostSerialize(data=request.data, instance=instance)
         serializer.is_valid(raise_exception=True)
         serializer.save()

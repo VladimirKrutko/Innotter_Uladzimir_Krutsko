@@ -10,7 +10,7 @@ class Page(models.Model):
     Class with Page model
     """
     name = models.CharField(max_length=80)
-    uuid = models.CharField(max_length=30, unique=True)
+    uuid = models.CharField(max_length=100, unique=True)
     description = models.TextField()
     tags = models.ManyToManyField(Tag, related_name='tag')
     owner = models.ForeignKey('user.User', on_delete=models.CASCADE, related_name='owner')
@@ -18,7 +18,7 @@ class Page(models.Model):
     image = models.URLField(null=True, blank=True)
     is_private = models.BooleanField(default=False)
     follow_requests = models.ManyToManyField('user.User', related_name='requests')
-    unblock_date = models.DateTimeField(null=True, blank=True)
+    unblock_date = models.DateTimeField(null=True, blank=True, default=None)
 
     def __str__(self):
         return self.name

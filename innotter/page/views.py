@@ -1,4 +1,4 @@
-from .serializers import PageSerializer
+from .serializers import PageSerializer, PagePublicSerializer, PagePrivateSerializer
 from rest_framework.generics import UpdateAPIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -20,8 +20,52 @@ class UpdatePageView(UpdateAPIView):
     permission_classes = (PageUpdatePermission, IsAuthenticated)
 
     def put(self, request, *args, **kwargs):
-        saved_page = get_object_or_404()
+
+        instance = get_object_or_404(Page.objects.all(), id=kwargs['pk'])
         data = request.data
-        serializer = self.serializer_class(data=data)
+        serializer = self.serializer_class(data=data, instance=instance)
         serializer.is_valid()
+        serializer.save()
         return Response(data, status.HTTP_200_OK)
+
+
+class AddFollowersPublicPage(UpdatePageView):
+    serializer_class = PagePublicSerializer
+    permission_classes = (PageUpdatePermission, IsAuthenticated)
+
+    def put(self, request, *args, **kwargs):
+        instance = get_object_or_404(Page.objects.all(), id=kwargs['pk'])
+        data = request.data
+        serializer = self.serializer_class(data=data, instance=instance)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except:
+            return serializer.errors
+
+        serializer.save()
+
+        return Response(serializer, status.HTTP_200_OK)
+
+
+class AddFollowersPrivatePage(UpdatePageView):
+    serializer_class = PagePrivateSerializer
+    permission_classes = (PageUpdatePermission, IsAuthenticated)
+
+    def put(self, request, *args, **kwargs):
+        instance = get_object_or_404(Page.objects.all(), id=kwargs['pk'])
+        data = request.data
+        serializer = self.serializer_class(data=data, instance=instance)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except:
+            return serializer.errors
+
+        serializer.save()
+
+        return Response(serializer, status.HTTP_200_OK)
+
+
+
+
+
+

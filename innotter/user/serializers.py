@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import authenticate
 from .models import User, UploadImage
 from page.serializers import PageSerializer
+import uuid
 
 
 class UserRegistration(serializers.ModelSerializer):
@@ -39,7 +40,8 @@ class UserRegistration(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         page_data = {'owner': user,
-                     'name': user.username}
+                     'name': user.username,
+                     'uuid': str(uuid.uuid4())}
         page_ser.create(validated_data=page_data)
         return user
 

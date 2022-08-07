@@ -15,7 +15,7 @@ class RegistrationAPIView(APIView):
     serializer_class = UserRegistration
     renderer_classes = (UserJSONRenderer,)
 
-    def post(self, request):
+    async def post(self, request):
         user = request.data.get('user', {})
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
