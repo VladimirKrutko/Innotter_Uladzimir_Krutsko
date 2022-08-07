@@ -23,6 +23,7 @@ class UpdatePageView(UpdateAPIView):
 
         instance = get_object_or_404(Page.objects.all(), id=kwargs['pk'])
         data = request.data
+        print(data)
         serializer = self.serializer_class(data=data, instance=instance)
         serializer.is_valid()
         serializer.save()
@@ -31,9 +32,10 @@ class UpdatePageView(UpdateAPIView):
 
 class AddFollowersPublicPage(UpdatePageView):
     serializer_class = PagePublicSerializer
-    permission_classes = (PageUpdatePermission, IsAuthenticated)
+    # permission_classes = (PageUpdatePermission, IsAuthenticated)
 
     def put(self, request, *args, **kwargs):
+
         instance = get_object_or_404(Page.objects.all(), id=kwargs['pk'])
         data = request.data
         serializer = self.serializer_class(data=data, instance=instance)
@@ -49,7 +51,7 @@ class AddFollowersPublicPage(UpdatePageView):
 
 class AddFollowersPrivatePage(UpdatePageView):
     serializer_class = PagePrivateSerializer
-    permission_classes = (PageUpdatePermission, IsAuthenticated)
+    # permission_classes = (PageUpdatePermission, IsAuthenticated)
 
     def put(self, request, *args, **kwargs):
         instance = get_object_or_404(Page.objects.all(), id=kwargs['pk'])

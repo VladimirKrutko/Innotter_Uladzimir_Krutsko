@@ -31,7 +31,7 @@ class PageSerializer(serializers.ModelSerializer):
         instance.uuid = validated_data.get('uuid', instance.uuid)
         instance.description = validated_data.get('description', instance.description)
         instance.unblock_date = validated_data.get('unblock_date', None)
-
+        instance.is_private = validated_data.get('is_private', instance.is_private)
         if validated_data.get('tags') is not None:
             tag = Tag.objects.get(name=validated_data.get('tags'))
             instance.tags.add(tag)
