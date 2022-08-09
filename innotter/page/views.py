@@ -4,53 +4,44 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework.generics import get_object_or_404
-from .models import Page
-
-
-class PageUpdatePermission(BasePermission):
-    def has_object_permission(self, request, view, obj):
-        if obj.author == request.user:
-            return True
-        return False
+from page.models import Page
+from user.models import User
 
 
 class UpdatePageView(UpdateAPIView):
-
     serializer_class = PageSerializer
-    permission_classes = (PageUpdatePermission, IsAuthenticated)
+    # permission_classes = (PageUpdatePermission, IsAuthenticated)
 
     def put(self, request, *args, **kwargs):
-
-        instance = get_object_or_404(Page.objects.all(), id=kwargs['pk'])
+        instance = Page.objects.get(id=kwargs['pk'])
         data = request.data
-        print(data)
         serializer = self.serializer_class(data=data, instance=instance)
         serializer.is_valid()
         serializer.save()
-        return Response(data, status.HTTP_200_OK)
+        return Response(data)
 
 
 class AddFollowersPublicPage(UpdatePageView):
     serializer_class = PagePublicSerializer
+
     # permission_classes = (PageUpdatePermission, IsAuthenticated)
 
     def put(self, request, *args, **kwargs):
 
-        instance = get_object_or_404(Page.objects.all(), id=kwargs['pk'])
-        data = request.data
-        serializer = self.serializer_class(data=data, instance=instance)
-        try:
-            serializer.is_valid(raise_exception=True)
-        except:
-            return serializer.errors
+        instance = get_object_or_404(Page.objects.all(), pk=int(kwargs['pk']))
 
+        data = request.data
+        serializer = self.serializer_class(data={'followers':data.get('followers')}, instance=instance)
+        serializer.is_valid(raise_exception=True)
+        print(serializer.errors)
         serializer.save()
 
-        return Response(serializer, status.HTTP_200_OK)
+        return Response()
 
 
 class AddFollowersPrivatePage(UpdatePageView):
     serializer_class = PagePrivateSerializer
+
     # permission_classes = (PageUpdatePermission, IsAuthenticated)
 
     def put(self, request, *args, **kwargs):
@@ -64,10 +55,4 @@ class AddFollowersPrivatePage(UpdatePageView):
 
         serializer.save()
 
-        return Response(serializer, status.HTTP_200_OK)
-
-
-
-
-
-
+        return Response(serializer)
