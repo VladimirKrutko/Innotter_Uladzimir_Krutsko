@@ -23,6 +23,7 @@ class PostSerialize(serializers.ModelSerializer):
 
         instance.content = validated_data.get('content', instance.content)
         instance.is_delete = validated_data.get('is_delete', instance.is_delete)
+
         if validated_data.get('likes') is not None:
             instance.likes.add(validated_data.get('likes'))
 

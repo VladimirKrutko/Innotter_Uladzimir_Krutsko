@@ -13,6 +13,7 @@ class PostCreateView(APIView):
 
     def post(self, request):
         data = request.data.get('post')
+        print(request.user)
         serializer = self.serializer_class(data=data)
         serializer.is_valid()
         serializer.save()
@@ -21,7 +22,7 @@ class PostCreateView(APIView):
 
 class PostUpdateView(UpdateAPIView):
     serializer_class = PostSerialize
-    permission_classes = (PostUpdateDeletePermission,)
+    # permission_classes = (PostUpdateDeletePermission,)
 
     def put(self, request, *args, **kwargs):
         pk = kwargs.get('pk')

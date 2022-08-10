@@ -38,21 +38,6 @@ class User(AbstractUser, PermissionsMixin):
     def get_role(self) -> models.CharField:
         return self.role
 
-    # change token to service
-    @property
-    def token(self):
-        return self._generate_jwt_token()
-
-    def _generate_jwt_token(self):
-        dt = datetime.now() + timedelta(days=1)
-
-        token = jwt.encode({
-            'id': self.pk,
-            'exp': int(dt.strftime('%s'))
-        }, settings.SECRET_KEY, algorithm='HS256')
-
-        return token
-
 
 class UploadImage(models.Model):
     name = models.CharField(max_length=100)
