@@ -32,8 +32,3 @@ class PostUpdateView(UpdateAPIView):
         serializer.save()
 
         return Response(serializer)
-
-
-
-
-

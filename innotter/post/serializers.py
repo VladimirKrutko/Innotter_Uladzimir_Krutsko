@@ -30,4 +30,3 @@ class PostSerialize(serializers.ModelSerializer):
         instance.update_date = str(datetime.now())
         instance.save()
         return instance
-

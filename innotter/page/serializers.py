@@ -87,4 +87,3 @@ class PagePrivateSerializer(serializers.Serializer):
         instance.save()
 
         return instance
-
