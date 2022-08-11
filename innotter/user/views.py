@@ -45,7 +45,7 @@ class UpdateAPIView(APIView):
 
     def post(self, request):
         user = request.data.get('user', {})
-        serializer = self.serializer_class(data=request.data)
+        serializer = self.serializer_class(data=user)
         if not serializer.is_valid():
             raise ValidationError('Something go wrong')
         return Response(serializer.data, status=status.HTTP_200_OK)
