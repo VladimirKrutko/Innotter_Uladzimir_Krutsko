@@ -2,18 +2,18 @@ from rest_framework.views import APIView
 from rest_framework.generics import UpdateAPIView, RetrieveUpdateDestroyAPIView
 from post.serializers import PostSerialize
 from post.permissions import PostUpdateDeletePermission
+from rest_framework.permissions import IsAuthenticated
 from post.models import Post
 from rest_framework.response import Response
 from rest_framework.generics import get_object_or_404
 
 
 class PostCreateView(APIView):
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = PostSerialize
 
     def post(self, request):
         data = request.data.get('post')
-        print(request.user)
         serializer = self.serializer_class(data=data)
         serializer.is_valid()
         serializer.save()
@@ -22,7 +22,7 @@ class PostCreateView(APIView):
 
 class PostUpdateView(UpdateAPIView):
     serializer_class = PostSerialize
-    # permission_classes = (PostUpdateDeletePermission,)
+    permission_classes = (PostUpdateDeletePermission,)
 
     def put(self, request, *args, **kwargs):
         pk = kwargs.get('pk')

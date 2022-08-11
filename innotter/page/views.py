@@ -1,16 +1,16 @@
 from .serializers import PageSerializer, PagePublicSerializer, PagePrivateSerializer
-from rest_framework.generics import UpdateAPIView
+from rest_framework.generics import UpdateAPIView, ListAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework.generics import get_object_or_404
 from page.models import Page
-from user.models import User
+from page.permissions import PageUpdatePermission
 
 
 class UpdatePageView(UpdateAPIView):
     serializer_class = PageSerializer
-    # permission_classes = (PageUpdatePermission, IsAuthenticated)
+    permission_classes = (PageUpdatePermission, IsAuthenticated)
 
     def put(self, request, *args, **kwargs):
         instance = Page.objects.get(id=kwargs['pk'])
@@ -24,7 +24,7 @@ class UpdatePageView(UpdateAPIView):
 class AddFollowersPublicPage(UpdatePageView):
     serializer_class = PagePublicSerializer
 
-    # permission_classes = (PageUpdatePermission, IsAuthenticated)
+    permission_classes = (PageUpdatePermission, IsAuthenticated)
 
     def put(self, request, *args, **kwargs):
 
@@ -42,7 +42,7 @@ class AddFollowersPublicPage(UpdatePageView):
 class AddFollowersPrivatePage(UpdatePageView):
     serializer_class = PagePrivateSerializer
 
-    # permission_classes = (PageUpdatePermission, IsAuthenticated)
+    permission_classes = (PageUpdatePermission, IsAuthenticated)
 
     def put(self, request, *args, **kwargs):
         instance = get_object_or_404(Page.objects.all(), id=kwargs['pk'])
@@ -56,3 +56,9 @@ class AddFollowersPrivatePage(UpdatePageView):
         serializer.save()
 
         return Response(serializer)
+
+
+class ListPagesView(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = PageSerializer
+    queryset = Page.objects.all()

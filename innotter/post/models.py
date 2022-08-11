@@ -13,9 +13,3 @@ class Post(models.Model):
 
     def __str__(self):
         return str(self.id) + '_' + str(self.page_id)
-
-
-
-
-
-

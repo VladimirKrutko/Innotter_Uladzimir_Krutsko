@@ -25,9 +25,9 @@ class PageSerializer(serializers.ModelSerializer):
         return page
 
     def update(self, instance, validated_data):
-        update_fields = set([f.name for f in instance._meta.get_fileds()]) & set(validated_data.keys())
-        for field in update_fields:
-            setattr(instance, field, validated_data[field])
+
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
 
         instance.save()
 

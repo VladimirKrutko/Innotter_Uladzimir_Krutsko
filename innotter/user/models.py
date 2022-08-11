@@ -1,3 +1,4 @@
+from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin, AbstractUser
 from django.db import models
 import jwt
@@ -5,7 +6,26 @@ from datetime import datetime, timedelta
 from django.conf import settings
 
 
-class User(AbstractUser, PermissionsMixin):
+class UserManager(BaseUserManager):
+
+    def create_user(self, username, email, password, role='user'):
+        user = self.model(username=username, email=email, role=role)
+        user.set_password(password)
+        user.save()
+
+        return user
+
+    def create_superuser(self, username, email, password):
+
+        user = self.create_user(username, email, password, 'admin')
+        user.is_superuser = True
+        user.is_staff = True
+        user.save()
+
+        return user
+
+
+class User(AbstractBaseUser, PermissionsMixin):
     """
     User model in innoter project
     """
@@ -32,11 +52,27 @@ class User(AbstractUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
+    objects = UserManager()
+
     def __str__(self) -> models.EmailField:
         return self.email
 
-    def get_role(self) -> models.CharField:
-        return self.role
+    # @property
+    # def token(self):
+    #     return self._generate_jwt_token()
+    #
+    # def get_role(self) -> models.CharField:
+    #     return self.role
+    #
+    # def _generate_jwt_token(self):
+    #     dt = datetime.now() + timedelta(days=30)
+    #
+    #     token = jwt.encode({
+    #         'id': self.pk,
+    #         'exp': int(dt.strftime('%s'))
+    #     }, settings.SECRET_KEY, algorithm='HS256')
+    #
+    #     return token
 
 
 class UploadImage(models.Model):
