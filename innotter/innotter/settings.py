@@ -140,7 +140,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-AWS_BASE_STORAGE = 's3://innotter-uladzimir-krutsko/user-image/'
+AWS_BASE_STORAGE = 'innotter-uladzimir-krutsko/user-image/'
 AWS_ACCESS_KEY_ID = 'AKIA46GRRWDGRIFQIK7L'
 AWS_SECRET_ACCESS_KEY = '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'
 AWS_STORAGE_BUCKET_NAME = 'innotter-uladzimir-krutsko'
