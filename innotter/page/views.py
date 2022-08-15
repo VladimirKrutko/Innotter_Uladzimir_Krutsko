@@ -12,7 +12,7 @@ from post.models import Post
 
 class UpdatePageView(UpdateAPIView):
     serializer_class = PageSerializer
-    permission_classes = [PagePermission]
+    permission_classes = (PagePermission, IsAuthenticated)
 
     def put(self, request, *args, **kwargs):
 
@@ -27,7 +27,7 @@ class UpdatePageView(UpdateAPIView):
 
 class BlockPageView(UpdatePageView):
     serializer_class = BlockPageSerializer
-    permission_classes = [PageBlockPermissions]
+    permission_classes = (PageBlockPermissions, IsAuthenticated)
 
     def put(self, request, *args, **kwargs):
         instance = Page.objects.get(id=kwargs['pk'])

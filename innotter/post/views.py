@@ -1,46 +1,83 @@
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import UpdateAPIView
-from post.serializers import PostSerialize
-from post.permissions import PostUpdateDeletePermission
+from post.serializers import PostSerializer
+from post.permissions import PostUpdatePermission, PostDeletePermission
 from rest_framework.permissions import IsAuthenticated
 from post.models import Post
 from rest_framework.response import Response
-from rest_framework.generics import get_object_or_404
-from page.models import Page
+from rest_framework.exceptions import APIException
 
 
-class PostCreateView(APIView):
-    permission_classes = (IsAuthenticated,)
-    serializer_class = PostSerialize
+class PostAPIView(ModelViewSet):
+    permission_classes = (IsAuthenticated, PostUpdatePermission)
+    serializer_class = PostSerializer
 
-    def post(self, request):
-
+    def create(self, request, *args, **kwargs):
         data = request.data
-        print(data)
-        # page = Page.objects.get(owner=data['page_id'])
-        # data['page_id'] = page
-
+        data['email'] = request.user
         serializer = self.serializer_class(data=data)
         serializer.is_valid()
-        print(serializer.errors)
         serializer.save()
         return Response(serializer.data)
 
+    def update(self, request, *args, **kwargs):
+        data = request.data
+        instance = Post.objects.get(pk=kwargs['pk'])
+        self.check_object_permissions(request=request, obj=instance)
 
-class UpdatePostView(UpdateAPIView):
-    pass
-
-
-
-class PostUpdateView(UpdateAPIView):
-    serializer_class = PostSerialize
-    # permission_classes = (PostUpdateDeletePermission,)
-
-    def put(self, request, *args, **kwargs):
-        pk = kwargs.get('pk')
-        instance = get_object_or_404(Post.objects.all(), id=pk)
-        serializer = PostSerialize(data=request.data, instance=instance)
+        serializer = self.serializer_class(data=data, instance=instance)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        return Response(serializer)
+        return Response(serializer.data)
+
+# class PostCreateView(APIView):
+#     permission_classes = (IsAuthenticated,)
+#     serializer_class = PostSerializer
+#
+#     def post(self, request):
+#         data = request.data
+#         data['email'] = request.user
+#         serializer = self.serializer_class(data=data)
+#         serializer.is_valid()
+#         serializer.save()
+#         return Response(serializer.data)
+#
+#
+# class UpdatePostView(UpdateAPIView):
+#     serializer_class = PostSerializer
+#     permission_classes = (IsAuthenticated, PostUpdatePermission)
+#
+#     def put(self, request, *args, **kwargs):
+#         data = request.data
+#         instance = Post.objects.get(pk=kwargs['pk'])
+#         self.check_object_permissions(request=request, obj=instance)
+#
+#         serializer = self.serializer_class(data=data, instance=instance)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#
+#         return Response(serializer.data)
+
+
+class PostDeleteView(UpdateAPIView):
+    serializer_class = PostSerializer
+    permission_classes = (PostDeletePermission,IsAuthenticated)
+
+    def put(self, request, *args, **kwargs):
+        instance = Post.objects.get(pk=kwargs['pk'])
+        self.check_object_permissions(request=request, obj=instance)
+
+        data = request.data
+        if data.keys() > 1:
+            raise APIException('Incorrect number of fields. Only is_delete field')
+
+        serializer = self.serializer_class()
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
+
+
+
