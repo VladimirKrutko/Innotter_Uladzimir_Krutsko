@@ -15,15 +15,26 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from innotter import settings
-from django.conf.urls import static
-# from .page.views import *
+
+from rest_framework import routers
+from user.views import UserAPIView
+# router = routers.SimpleRouter()
+# router.registry(r'user', UserAPIView)
+# path('api/', include(router.urls))router = routers.SimpleRouter()
+# router.registry(r'user', UserAPIView)
+# path('api/', include(router.urls)
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('user/', include('user.urls', namespace='user'))
+    path('user/', include('user.urls', namespace='user')),
+    path('post/', include('post.urls', namespace='post')),
+    path('page/', include('page.urls', namespace='page')),
+    path('api/v1/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 ]
-
-# if settings.DEBUG:
-    # urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
-
