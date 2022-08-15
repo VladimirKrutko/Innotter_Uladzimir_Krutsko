@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from .models import User, UploadImage
+from .models import User
 from page.serializers import PageSerializer
 import uuid
 
@@ -45,9 +45,15 @@ class UserRegistration(serializers.ModelSerializer):
         page_ser.create(validated_data=page_data)
         return user
 
+    def update(self, instance, validated_data):
+        for key, value in validated_data:
+            setattr(instance, key, value)
+
+        instance.save()
+        return instance
+
 
 class LoginSerializer(serializers.Serializer):
-
     email = serializers.CharField(max_length=255)
     username = serializers.CharField(max_length=255, read_only=True)
     password = serializers.CharField(max_length=128, write_only=True)
@@ -89,12 +95,11 @@ class LoginSerializer(serializers.Serializer):
 class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('email', 'image_s3_path', 'username', 'password')
+        fields = ('email', 'image_s3_path')
 
     def update(self, instance, validated_data):
-        for field in validated_data.keys():
-            if validated_data[field] != instance[field]:
-                instance[field] = validated_data[field]
+        for key, value in validated_data:
+            setattr(instance, key, value)
+
         instance.save()
         return instance
-

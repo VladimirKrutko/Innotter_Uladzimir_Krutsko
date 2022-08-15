@@ -1,7 +1,7 @@
 from rest_framework.permissions import BasePermission
 
 
-class ManagerPermission(BasePermission):
+class UserUpdatePermission(BasePermission):
     """
     Class with manager permission
     """
@@ -12,6 +12,6 @@ class ManagerPermission(BasePermission):
         return False
 
     def has_object_permission(self, request, view, obj):
-        if (obj.author != request.user) and (request.user.role == 'moderator'):
+        if obj.author != request.user:
             return True
         return False

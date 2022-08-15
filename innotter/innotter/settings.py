@@ -12,6 +12,17 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from datetime import timedelta
 from pathlib import Path
 import boto3
+import os
+
+
+os.environ["CELERY_LOADER"] = "django"
+# djcelery.setup_loader()
+AMQP_HOST = 'localhost'
+BROKER_HOST = 'localhost'
+BROKER_PORT = 5672
+BROKER_VHOST = "/"
+BROKER_USER = "innotter"
+BROKER_PASSWORD = "1458"
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -190,3 +201,4 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(days=50),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=100),
 }
+
