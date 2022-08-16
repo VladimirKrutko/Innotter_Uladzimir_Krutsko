@@ -1,4 +1,3 @@
-from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import UpdateAPIView
 from post.serializers import PostSerializer
@@ -35,7 +34,7 @@ class PostAPIView(ModelViewSet):
 
 class PostDeleteView(UpdateAPIView):
     serializer_class = PostSerializer
-    permission_classes = (PostDeletePermission,IsAuthenticated)
+    permission_classes = (PostDeletePermission, IsAuthenticated)
 
     def put(self, request, *args, **kwargs):
         instance = Post.objects.get(pk=kwargs['pk'])
