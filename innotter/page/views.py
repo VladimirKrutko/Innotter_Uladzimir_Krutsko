@@ -49,7 +49,6 @@ class AddFollowersPublicPage(UpdatePageView):
         data = request.data
         serializer = self.serializer_class(data={'followers': data.get('followers')}, instance=instance)
         serializer.is_valid(raise_exception=True)
-        print(serializer.errors)
         serializer.save()
 
         return Response()

@@ -10,7 +10,6 @@ class PageSerializer(serializers.ModelSerializer):
     """
     Class for serialize Page object
     """
-
     class Meta:
         model = Page
         fields = ['name', 'description', 'uuid', 'owner']
@@ -18,7 +17,6 @@ class PageSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         page = Page(**validated_data)
-        print('create_page')
         page.save()
         return page
 

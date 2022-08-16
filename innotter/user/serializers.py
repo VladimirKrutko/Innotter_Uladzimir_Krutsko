@@ -60,7 +60,6 @@ class LoginSerializer(serializers.Serializer):
     token = serializers.CharField(max_length=255, read_only=True)
 
     def validate(self, data):
-        print(data)
         email = data.get('email', None)
         password = data.get('password', None)
 
@@ -75,7 +74,6 @@ class LoginSerializer(serializers.Serializer):
             )
 
         user = authenticate(username=email, password=password)
-        print(user)
         if user is None:
             raise serializers.ValidationError(
                 'A user with this email and password was not found.'
