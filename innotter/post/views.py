@@ -32,34 +32,6 @@ class PostAPIView(ModelViewSet):
 
         return Response(serializer.data)
 
-# class PostCreateView(APIView):
-#     permission_classes = (IsAuthenticated,)
-#     serializer_class = PostSerializer
-#
-#     def post(self, request):
-#         data = request.data
-#         data['email'] = request.user
-#         serializer = self.serializer_class(data=data)
-#         serializer.is_valid()
-#         serializer.save()
-#         return Response(serializer.data)
-#
-#
-# class UpdatePostView(UpdateAPIView):
-#     serializer_class = PostSerializer
-#     permission_classes = (IsAuthenticated, PostUpdatePermission)
-#
-#     def put(self, request, *args, **kwargs):
-#         data = request.data
-#         instance = Post.objects.get(pk=kwargs['pk'])
-#         self.check_object_permissions(request=request, obj=instance)
-#
-#         serializer = self.serializer_class(data=data, instance=instance)
-#         serializer.is_valid(raise_exception=True)
-#         serializer.save()
-#
-#         return Response(serializer.data)
-
 
 class PostDeleteView(UpdateAPIView):
     serializer_class = PostSerializer
