@@ -49,6 +49,3 @@ class PostDeleteView(UpdateAPIView):
         serializer.save()
 
         return Response(serializer.data)
-
-
-

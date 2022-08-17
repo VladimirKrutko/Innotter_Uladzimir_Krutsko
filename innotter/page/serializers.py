@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from page.models import Page, Tag
+from page.models import Page
 from user.models import User
 from rest_framework.serializers import ValidationError
 from datetime import datetime

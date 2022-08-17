@@ -2,7 +2,6 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import UpdateAPIView
-from rest_framework.serializers import ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from user.serializers import LoginSerializer, UserRegistration, UpdateUserSerializer
 from user.renderers import UserJSONRenderer
