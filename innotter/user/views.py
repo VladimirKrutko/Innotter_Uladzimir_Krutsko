@@ -40,7 +40,7 @@ class LoginAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class UpdateAPIView(UpdateAPIView):
+class UpdateUserAPIView(UpdateAPIView):
     permission_classes = (IsAuthenticated, UserUpdatePermission)
     serializer_class = (UpdateUserSerializer,)
 
