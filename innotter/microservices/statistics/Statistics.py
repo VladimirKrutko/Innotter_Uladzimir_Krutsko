@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Tuple
 import psycopg2 as psycopg
 from innotter.settings import DATABASES
 from exceptions import IncorrectFormat
@@ -19,7 +19,16 @@ class GetStatistics:
         )
         return conn
 
-    def get_user_statistics_by_date(self, date) -> list[tuple]:
+    def _query_render(self, query_result: List[tuple], keys: Tuple[str, ...]) -> List[Dict]:
+        """
+        Function to transform list of tuples to list of dicts
+        """
+        json_query = [{key: value for key, value in zip(keys, row)}
+                      for row in query_result]
+
+        return json_query
+
+    def get_user_statistics_by_date(self, date) -> list[Dict]:
         """
         Get dict with users that registration in system after date
         """
@@ -40,16 +49,9 @@ class GetStatistics:
                 cur.execute(query)
                 user_data = cur.fetchall()
 
-        return user_data
+        json_data = self._query_render(query_result=user_data,
+                                       keys=('email', 'username', 'create_data', 'create_data', 'last_login',
+                                             'is_blocked', 'is_active', 'is_staff', 'is_admin', 'image_s3_path'))
 
-    @staticmethod
-    def query_render(query_result: List[tuple], keys: List[str]) -> List[Dict]:
-        """
-        Function to transform list of tuples to list of dicts
-        """
-        json_query = [{key: value for key, value in zip(keys, row)}
-                      for row in query_result]
-
-        return json_query
-
+        return json_data
 
