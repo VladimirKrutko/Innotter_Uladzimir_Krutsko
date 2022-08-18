@@ -10,6 +10,7 @@ class PageSerializer(serializers.ModelSerializer):
     """
     Class for serialize Page object
     """
+
     class Meta:
         model = Page
         fields = ['name', 'description', 'uuid', 'owner']
@@ -37,7 +38,7 @@ class PageSerializer(serializers.ModelSerializer):
         'posts': all post from this page
         }
         """
-        page_json = django_ser.serialize('json', [page_obj,])
+        page_json = django_ser.serialize('json', [page_obj, ])
         post_json = django_ser.serialize('json', [post for post in post_obj])
         result_json = {
             'page': page_json,

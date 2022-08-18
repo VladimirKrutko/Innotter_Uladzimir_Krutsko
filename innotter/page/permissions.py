@@ -9,7 +9,7 @@ class PagePermission(BasePermission):
             return True
         return False
 
-#
+
 class PageBlockPermissions(BasePermission):
 
     def has_permission(self, request, view):
@@ -26,5 +26,3 @@ class PageShowPermissions(BasePermission):
             return True
         else:
             return False
-
-

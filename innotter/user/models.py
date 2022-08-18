@@ -1,9 +1,6 @@
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
-from django.contrib.auth.models import PermissionsMixin, AbstractUser
+from django.contrib.auth.models import PermissionsMixin
 from django.db import models
-import jwt
-from datetime import datetime, timedelta
-from django.conf import settings
 
 
 class UserManager(BaseUserManager):

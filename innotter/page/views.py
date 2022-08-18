@@ -15,7 +15,6 @@ class UpdatePageView(UpdateAPIView):
     permission_classes = (PagePermission, IsAuthenticated)
 
     def put(self, request, *args, **kwargs):
-
         instance = Page.objects.get(id=kwargs['pk'])
         self.check_object_permissions(request, instance)
         data = request.data
@@ -43,7 +42,6 @@ class AddFollowersPublicPage(UpdatePageView):
     permission_classes = (PagePermission, IsAuthenticated)
 
     def put(self, request, *args, **kwargs):
-
         instance = get_object_or_404(Page.objects.all(), pk=int(kwargs['pk']))
         self.check_object_permissions(request=request, obj=instance)
         data = request.data
@@ -99,6 +97,6 @@ class ListFollowRequestView(ListPagePostView):
     def get(self, request, *args, **kwargs):
         page = Page.objects.get(pk=kwargs['pk'])
         self.check_object_permissions(request=request, obj=page)
-        page_json = serializers.serialize('json', [page,])
+        page_json = serializers.serialize('json', [page, ])
         response_json = {'follow_request': page_json['follow_requests']}
         return Response(response_json)
