@@ -12,17 +12,12 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from datetime import timedelta
 from pathlib import Path
 import boto3
-import os
 
 
-os.environ["CELERY_LOADER"] = "django"
-# djcelery.setup_loader()
-AMQP_HOST = 'localhost'
-BROKER_HOST = 'localhost'
-BROKER_PORT = 5672
-BROKER_VHOST = "/"
-BROKER_USER = "innotter"
-BROKER_PASSWORD = "1458"
+# CELERY_BROKER_URL = 'amqp://guest:guest@rabbitmq:15672/0'
+CELERY_BROKER_URL = 'amqp://localhost'
+# CELERY_RESULT_BACKEND = 'amqp://localhost:5672:5672/0'
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

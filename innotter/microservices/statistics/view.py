@@ -7,7 +7,7 @@ from microservices.AWS_SETTINGS import AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
 from datetime import datetime
 
 app = FastAPI()
-staticstic_class = GetStatistics()
+statistic_class = GetStatistics()
 
 AWS_BASE_STORAGE_BUCKET_NAME = 'test-function-uladzimir'
 S3_RESOURCE = boto3.resource('s3', aws_access_key_id=AWS_ACCESS_KEY_ID,
@@ -18,7 +18,7 @@ DEFAULT_DATE = str(datetime.now().date())
 
 @app.post('/get_statistic/')
 async def load_statistic(date: Union[str, None] = Query(default=DEFAULT_DATE, max_length=10)):
-    json_user_data = staticstic_class.get_user_statistics_by_date(date=date)
+    json_user_data = statistic_class.get_user_statistics_by_date(date=date)
     byte_user_data = bytes(json.dumps(json_user_data).encode('UTF-8'))
     dateload = ''.join(date.split('-'))
     users_link = f'user_data/innotter_db/user_json/dataload={dateload}/users.json'
