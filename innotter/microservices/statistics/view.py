@@ -1,12 +1,11 @@
-from fastapi import FastAPI, Query
-from typing import Union
 from Statistics import GetStatistics
 import boto3
 import json
 from microservices.AWS_SETTINGS import AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
 from datetime import datetime
+from typing import Dict
 
-app = FastAPI()
+
 statistic_class = GetStatistics()
 
 AWS_BASE_STORAGE_BUCKET_NAME = 'test-function-uladzimir'
@@ -16,8 +15,8 @@ S3_BUCKET = S3_RESOURCE.Bucket(AWS_BASE_STORAGE_BUCKET_NAME)
 DEFAULT_DATE = str(datetime.now().date())
 
 
-@app.post('/get_statistic/')
-async def load_statistic(date: Union[str, None] = Query(default=DEFAULT_DATE, max_length=10)):
+async def load_statistic(date_json: Dict):
+    date = date_json['date']
     json_user_data = statistic_class.get_user_statistics_by_date(date=date)
     byte_user_data = bytes(json.dumps(json_user_data).encode('UTF-8'))
     dateload = ''.join(date.split('-'))
