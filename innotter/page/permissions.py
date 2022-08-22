@@ -22,7 +22,7 @@ class PageBlockPermissions(BasePermission):
 class PageShowPermissions(BasePermission):
 
     def has_object_permission(self, request, view, obj):
-        if not obj.is_private or obj.followers.filter(email=request.user):
+        if not obj.is_private or obj.followers.filter(email=request.user) or request.user.is_admin:
             return True
         else:
             return False
