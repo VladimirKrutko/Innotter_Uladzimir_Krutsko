@@ -89,20 +89,20 @@ class PagePrivateSerializer(serializers.Serializer):
     Serialize for private user
     """
     followers = serializers.ListField(
-        child=serializers.DictField())
+        child=serializers.DictField(), required=False)
     follow_requests = serializers.ListField(
-        child=serializers.DictField())
+        child=serializers.DictField(), required=False)
 
     def validate(self, data):
         validate_data = {}
         if data.get('followers'):
-            validate_data['followers'] = [User.objects.get(email=user.get('email')).id
+            validate_data['followers'] = [User.objects.get(email=user.get('email'))
                                           for user in data.get('followers')]
 
-        elif data.get('follow_requests'):
+        elif data.get('follow_requests') is not None:
             validate_data['follow_requests'] = [User.objects.get(email=user.get('email')).id
                                                 for user in data.get('follow_requests')]
-        elif data.get('unblock_date'):
+        elif data.get('unblock_date') is not None:
             raise ValidationError('You can not block page')
 
         return validate_data
@@ -110,8 +110,11 @@ class PagePrivateSerializer(serializers.Serializer):
     def update(self, instance, validated_data):
 
         if validated_data.get('followers'):
-            for user_id in validated_data.get('followers'):
-                instance.followers.add(user_id)
+            fol_req = list(map(lambda x: x.id, instance.follow_requests.all()))
+            for user in validated_data.get('followers'):
+                if user.id in fol_req:
+                    instance.followers.add(user.id)
+                    instance.follow_requests.remove(user)
 
         elif validated_data.get('follow_requests'):
             for user_id in validated_data.get('follow_requests'):

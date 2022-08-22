@@ -46,6 +46,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     image_s3_path = models.CharField(max_length=200, null=True, blank=True, default=None)
+    unblock_date = models.DateField(default=None, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']

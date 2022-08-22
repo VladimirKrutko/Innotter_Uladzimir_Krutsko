@@ -5,7 +5,7 @@ from user.models import User
 class PagePermission(BasePermission):
 
     def has_object_permission(self, request, view, obj):
-        if obj.owner == request.user:
+        if obj.owner.email == request.user.email:
             return True
         return False
 

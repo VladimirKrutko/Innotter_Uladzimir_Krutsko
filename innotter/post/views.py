@@ -1,6 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import UpdateAPIView
-from post.serializers import PostSerializer
+from post.serializers import PostSerializer,  PostCreateSerializer, PostUpdateSerializer
 from post.permissions import PostUpdatePermission, PostDeletePermission
 from rest_framework.permissions import IsAuthenticated
 from post.models import Post
@@ -12,17 +12,14 @@ from user.models import User
 
 class PostAPIView(ModelViewSet):
     permission_classes = (IsAuthenticated, PostUpdatePermission)
-    serializer_class = PostSerializer
+    serializer_class = PostCreateSerializer
 
     def create(self, request, *args, **kwargs):
         data = request.data
         data['page_id'] = User.objects.get(email=request.user.email).pk
-        print(data)
         serializer = self.serializer_class(data=data)
         serializer.is_valid()
-        print(serializer.errors)
         serializer.save()
-        # send_email.delay(serializer.page_id)
         return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
@@ -38,7 +35,7 @@ class PostAPIView(ModelViewSet):
 
 
 class PostDeleteView(UpdateAPIView):
-    serializer_class = PostSerializer
+    serializer_class = PostUpdateSerializer
     permission_classes = (PostDeletePermission, IsAuthenticated)
 
     def put(self, request, *args, **kwargs):
@@ -46,11 +43,11 @@ class PostDeleteView(UpdateAPIView):
         self.check_object_permissions(request=request, obj=instance)
 
         data = request.data
-        if data.keys() > 1:
+        if len(data.keys()) > 1:
             raise APIException('Incorrect number of fields. Only is_delete field')
 
-        serializer = self.serializer_class()
-        serializer.is_valid(raise_exception=True)
+        serializer = self.serializer_class(data=data, instance=instance)
+        serializer.is_valid()
         serializer.save()
 
         return Response(serializer.data)

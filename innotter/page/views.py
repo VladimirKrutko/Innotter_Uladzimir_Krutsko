@@ -8,6 +8,7 @@ from rest_framework.generics import get_object_or_404
 from page.models import Page
 from page.permissions import PagePermission, PageBlockPermissions, PageShowPermissions
 from post.models import Post
+import json
 
 
 class UpdatePageView(UpdateAPIView):
@@ -61,14 +62,10 @@ class AddFollowersPrivatePage(UpdatePageView):
 		self.check_object_permissions(request=request, obj=instance)
 		data = request.data
 		serializer = self.serializer_class(data=data, instance=instance)
-		try:
-			serializer.is_valid(raise_exception=True)
-		except:
-			return serializer.errors
-		
+		serializer.is_valid(raise_exception=True)
 		serializer.save()
 		
-		return Response(serializer)
+		return Response({'Status': 'Ok'})
 
 
 class ListPagesView(ListAPIView):
@@ -85,7 +82,7 @@ class ListPagePostView(ListAPIView):
 		page = Page.objects.get(pk=page_id)
 		self.check_object_permissions(request=request, obj=page)
 		
-		post = Post.objects.get(page_id=page_id)
+		post = Post.objects.filter(page_id=page_id)
 		response_json = PageSerializer.serialize_page_post(page_obj=page, post_obj=post)
 		
 		return Response(response_json)
@@ -97,6 +94,7 @@ class ListFollowRequestView(ListPagePostView):
 	def get(self, request, *args, **kwargs):
 		page = Page.objects.get(pk=kwargs['pk'])
 		self.check_object_permissions(request=request, obj=page)
-		page_json = serializers.serialize('json', [page, ])
-		response_json = {'follow_request': page_json['follow_requests']}
+		page_json = json.loads(serializers.serialize('json', [page, ]))
+		# print(page_json["follow_requests"])
+		response_json = {'follow_request': page_json[0]['fields']['follow_requests']}
 		return Response(response_json)

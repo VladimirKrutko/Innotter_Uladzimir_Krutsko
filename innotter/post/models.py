@@ -5,7 +5,7 @@ class Post(models.Model):
 
     page_id = models.ForeignKey('page.Page', on_delete=models.PROTECT)
     reply_to = models.ForeignKey('post.Post', on_delete=models.PROTECT, default=-1)
-    content = models.TextField()
+    content = models.TextField(null=True)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField('user.User', default=None)

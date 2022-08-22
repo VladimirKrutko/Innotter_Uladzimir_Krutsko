@@ -47,6 +47,8 @@ class UserRegistration(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         for key, value in validated_data:
+            if key == 'email':
+                continue
             setattr(instance, key, value)
 
         instance.save()
@@ -91,12 +93,15 @@ class LoginSerializer(serializers.Serializer):
 
 
 class UpdateUserSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = User
-        fields = ('email', 'image_s3_path')
+        fields = ('email', 'image_s3_path', 'is_blocked')
 
     def update(self, instance, validated_data):
-        for key, value in validated_data:
+        for key, value in validated_data.items():
+            if key == 'email':
+                continue
             setattr(instance, key, value)
 
         instance.save()

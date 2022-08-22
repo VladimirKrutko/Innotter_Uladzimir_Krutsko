@@ -46,23 +46,25 @@ class LoginAPIView(APIView):
 
 
 class UpdateUserAPIView(UpdateAPIView):
-    permission_classes = (IsAuthenticated, UserUpdatePermission)
-    serializer_class = (UpdateUserSerializer,)
+    permission_classes = (UserUpdatePermission,)
+    serializer_class = UpdateUserSerializer
     
     def put(self, request, *args, **kwargs):
         user = request.data
         instance = User.objects.get(email=user['email'])
-        self.check_object_permissions(request, user)
+        self.check_object_permissions(request=request, obj=instance)
         serializer = self.serializer_class(data=user, instance=instance)
-        serializer.is_valid(raise_exception=True)
+        serializer.is_valid()
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+
+
 class UserStatistic(ListAPIView):
-    pass
-#     def get(self, request, *args, **kwargs):
-#         date_json = json.dumps({'date': kwargs['date']})
-#         producer.produce('user-tracker', date_json.encode('utf-8'))
-#         producer.flush()
-#         return Response({'Status': 'OK'})
+
+    def get(self, request, *args, **kwargs):
+        date_json = json.dumps({'date': kwargs['date']})
+        producer.produce('user-tracker', date_json.encode('utf-8'))
+        producer.flush()
+        return Response({'Status': 'OK'})
