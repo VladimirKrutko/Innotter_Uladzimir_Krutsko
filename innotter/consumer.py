@@ -1,7 +1,8 @@
+import json
 import pika
 from user.models import User
 from user.serializers import UpdateUserSerializer
-import json
+
 
 connection = pika.BlockingConnection(pika.ConnectionParameters(
     host='localhost'))

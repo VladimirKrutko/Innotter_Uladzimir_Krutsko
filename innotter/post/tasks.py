@@ -13,6 +13,7 @@ CLIENT = boto3.client('ses', region_name=AWS_REGION, aws_access_key_id=AWS_ACCES
 
 @shared_task()
 def send_email(post_id):
-	post = Post.objects.get(pk=post_id)
-	post_email = post.page_id.owner.email
-	emailing_list = [user.email for user in post.page_id.followers.all()]
+    post = Post.objects.get(pk=post_id)
+    post_email = post.page_id.owner.email
+    emailing_list = [user.email for user in post.page_id.followers.all()]
+    print(emailing_list)

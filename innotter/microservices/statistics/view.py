@@ -7,7 +7,6 @@ from typing import Dict
 
 
 statistic_class = GetStatistics()
-
 AWS_BASE_STORAGE_BUCKET_NAME = 'test-function-uladzimir'
 S3_RESOURCE = boto3.resource('s3', aws_access_key_id=AWS_ACCESS_KEY_ID,
                              aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
