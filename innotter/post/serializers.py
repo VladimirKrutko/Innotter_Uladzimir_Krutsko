@@ -5,26 +5,32 @@ from user.models import User
 from page.models import Page
 
 
-class PostSerializer(serializers.ModelSerializer):
+class PostSerializer(serializers.Serializer):
 
-    email = serializers.EmailField()
-    reply_to = serializers.IntegerField()
-    content = serializers.CharField(max_length=10000)
+    page_id = serializers.IntegerField()
+    reply_to = serializers.IntegerField(default=-1, required=False)
+    content = serializers.CharField(max_length=10000, required=False)
     likes = serializers.ListField(
-        child=serializers.DictField())
-    is_delete = serializers.BooleanField()
+        child=serializers.DictField(), required=False)
+    is_delete = serializers.BooleanField(default=False, required=False)
     """
     'likes': [{'email': 'email@gmail.com'},]
     """
     def validate(self, data):
-        data['page_id'] = Page.objects.get(owner=data['email']).pk
-        del data['email']
+        # data['page_id'] = Page.objects.get(pk=data['page_id'])
+        # # del data['email']
+        if data.get('reply_to'):
+            data['reply_to'] = Post.objects.get(pk=data['reply_to'])
+        else:
+            data['reply_to'] = Post.objects.get(pk=-1)
 
-        if data['likes']:
-            data['likes'] = [User.objects.get(email=email['email']).pk for email in data['likes']]
+        if data.get('likes'):
+            # data['likes'] = User.objects.filter(email__in=[email for email in data['likes']]).set()
+            data['likes'] = [User.objects.get(email=email['email']) for email in data['likes']]
         return data
 
     def create(self, validated_data):
+        print(validated_data)
         post = Post(**validated_data)
         post.save()
         return post

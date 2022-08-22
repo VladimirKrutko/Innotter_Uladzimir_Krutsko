@@ -6,7 +6,8 @@ from rest_framework.permissions import IsAuthenticated
 from post.models import Post
 from rest_framework.response import Response
 from rest_framework.exceptions import APIException
-from post.tasks import send_email
+from user.models import User
+# from post.tasks import send_email
 
 
 class PostAPIView(ModelViewSet):
@@ -15,11 +16,13 @@ class PostAPIView(ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         data = request.data
-        data['email'] = request.user
+        data['page_id'] = User.objects.get(email=request.user.email).pk
+        print(data)
         serializer = self.serializer_class(data=data)
         serializer.is_valid()
+        print(serializer.errors)
         serializer.save()
-        send_email.delay(serializer.page_id)
+        # send_email.delay(serializer.page_id)
         return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):

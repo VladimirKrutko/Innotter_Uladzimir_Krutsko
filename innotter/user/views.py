@@ -60,8 +60,9 @@ class UpdateUserAPIView(UpdateAPIView):
 
 
 class UserStatistic(ListAPIView):
-    def get(self, request, *args, **kwargs):
-        date_json = json.dumps({'date': kwargs['date']})
-        producer.produce('user-tracker', date_json.encode('utf-8'))
-        producer.flush()
-        return Response({'Status': 'OK'})
+    pass
+#     def get(self, request, *args, **kwargs):
+#         date_json = json.dumps({'date': kwargs['date']})
+#         producer.produce('user-tracker', date_json.encode('utf-8'))
+#         producer.flush()
+#         return Response({'Status': 'OK'})

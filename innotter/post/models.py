@@ -8,7 +8,7 @@ class Post(models.Model):
     content = models.TextField()
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now_add=True)
-    likes = models.ManyToManyField('user.User')
+    likes = models.ManyToManyField('user.User', default=None)
     is_delete = models.BooleanField(default=False)
 
     def __str__(self):
