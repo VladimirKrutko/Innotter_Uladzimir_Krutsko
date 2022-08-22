@@ -15,3 +15,8 @@
 /innotter/.idea/inspectionProfiles/Project_Default.xml
 /innotter/.idea/vcs.xml
 /innotter/.idea/workspace.xml
+/innotter/post/migrations/0002_alter_post_likes.py
+/innotter/user/migrations/0002_user_unblock_date.py
+/innotter/post/migrations/0003_alter_post_likes.py
+/innotter/post/migrations/0004_alter_post_likes.py
+/innotter/page/migrations/__init__.py
