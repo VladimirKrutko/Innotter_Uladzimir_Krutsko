@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from page.models import Page
+from page.models import Page, Tag
 from user.models import User
 from rest_framework.serializers import ValidationError
 from datetime import datetime
@@ -13,8 +13,20 @@ class PageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Page
-        fields = ['name', 'description', 'uuid', 'owner']
+        fields = ['name', 'description', 'uuid', 'owner', 'unblock_date']
         read_only_fields = ('owner',)
+
+    def validate(self, data):
+
+        if data.get('tag') is not None:
+            if Tag.objects.filter(name=data['tag']):
+                data['tag'] = Tag.objects.get(name=data['tag'])
+            else:
+                tag = Tag(name=data['tag'])
+                tag.save()
+                data['tag'] = tag
+
+        return data
 
     def create(self, validated_data):
         page = Page(**validated_data)
