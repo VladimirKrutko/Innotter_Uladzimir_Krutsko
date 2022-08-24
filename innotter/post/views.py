@@ -34,11 +34,12 @@ class PostAPIView(ModelViewSet):
         return Response(serializer.data)
 
     def put_like(self, request, *args, **kwargs):
-        data = request.data
         instance = Post.objects.get(pk=kwargs['pk'])
-        data['page_id'] = kwargs['pk']
+        data = {'likes': [request.user.pk],
+                'page_id': instance.page_id.pk}
         serializer = self.serializer_class(data=data, instance=instance)
         serializer.is_valid()
+        print(serializer.errors)
         serializer.save()
 
         return Response(serializer.data)

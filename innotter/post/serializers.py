@@ -12,15 +12,13 @@ class PostCreateSerializer(serializers.ModelSerializer):
         fields = ('page_id', 'reply_to', 'content', 'likes', 'is_delete')
 
     def validate(self, data):
-        data['page_id'] = Page.objects.get(pk=data['page_id'])
+        # if data.get('page_id'):
+        #     data['page_id'] = Page.objects.get(pk=data['page_id'])
 
         if data.get('reply_to'):
             data['reply_to'] = Post.objects.get(pk=data['reply_to'])
         else:
             data['reply_to'] = Post.objects.get(pk=-1)
-
-        if data.get('likes'):
-            data['likes'] = [User.objects.get(email=email['email']) for email in data['likes']]
 
         return data
 
@@ -34,8 +32,10 @@ class PostCreateSerializer(serializers.ModelSerializer):
         instance.is_delete = validated_data.get('is_delete', instance.is_delete)
 
         if validated_data.get('likes') is not None:
-            for like in validated_data['likes']:
-                instance.likes.add(like)
+            if validated_data['likes'][0] in instance.likes.all():
+                instance.likes.remove(validated_data['likes'][0])
+            else:
+                instance.likes.add(validated_data['likes'][0])
 
         instance.update_date = str(datetime.now())
         instance.save()
