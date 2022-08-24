@@ -25,7 +25,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     """
-    User model in innoter project
+    User model in innotter project
     """
 
     class Roles(models.TextChoices):
@@ -55,25 +55,3 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self) -> models.EmailField:
         return self.email
-
-    # @property
-    # def token(self):
-    #     return self._generate_jwt_token()
-    #
-    # def get_role(self) -> models.CharField:
-    #     return self.role
-    #
-    # def _generate_jwt_token(self):
-    #     dt = datetime.now() + timedelta(days=30)
-    #
-    #     token = jwt.encode({
-    #         'id': self.pk,
-    #         'exp': int(dt.strftime('%s'))
-    #     }, settings.SECRET_KEY, algorithm='HS256')
-    #
-    #     return token
-
-
-class UploadImage(models.Model):
-    name = models.CharField(max_length=100)
-    image = models.ImageField(upload_to=name, blank=True, null=True)

@@ -6,10 +6,10 @@ import json
 
 app = FastAPI()
 
-AWS_BASE_STORAGE = 'innotter-uladzimir-krutsko/user-image/'
+AWS_BASE_STORAGE = 'test-function-uladzimir/user-image/'
 AWS_ACCESS_KEY_ID = 'AKIA46GRRWDGRIFQIK7L'
 AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = 'innotter-uladzimir-krutsko'
+AWS_STORAGE_BUCKET_NAME = 'test-function-uladzimir'
 S3_RESOURCE = boto3.resource('s3', aws_access_key_id=AWS_ACCESS_KEY_ID,
                              aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
 S3_BUCKET = S3_RESOURCE.Bucket(AWS_STORAGE_BUCKET_NAME)
@@ -29,6 +29,7 @@ async def send_link(message: Dict):
 def upload_image(image: bytes = File(...),
                  email: str = Form(...),
                  username: str = Form(...)):
+    print(email)
     image_link = 'user-image' + '' + email.replace('.', '') + '-' + username + '.jpeg'
     image = image
     S3_BUCKET.put_object(Key=image_link, Body=image)

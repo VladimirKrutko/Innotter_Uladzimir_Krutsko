@@ -1,8 +1,17 @@
 import json
 import pika
-from user.models import User
-from user.serializers import UpdateUserSerializer
+# import django
+from sys import path
+from os import environ
 
+# path.append('E:\innotter\innotter\innotter\settings.py')
+# environ.setdefault('DJANGO_SETTINGS_MODULE', 'user.settings')
+# django.setup()
+path.append('E:\innotter\innotter\user\models')
+path.append('E:\innotter\innotter\user\serializers')
+
+from models import User
+from serializers import UpdateUserSerializer
 
 connection = pika.BlockingConnection(pika.ConnectionParameters(
     host='localhost'))

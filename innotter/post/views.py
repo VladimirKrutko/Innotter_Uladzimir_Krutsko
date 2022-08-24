@@ -1,6 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import UpdateAPIView
-from post.serializers import PostSerializer,  PostCreateSerializer, PostUpdateSerializer
+from post.serializers import PostCreateSerializer
 from post.permissions import PostUpdatePermission, PostDeletePermission
 from rest_framework.permissions import IsAuthenticated
 from post.models import Post
@@ -26,16 +26,26 @@ class PostAPIView(ModelViewSet):
         data = request.data
         instance = Post.objects.get(pk=kwargs['pk'])
         self.check_object_permissions(request=request, obj=instance)
-
+        data['page_id'] = kwargs['pk']
         serializer = self.serializer_class(data=data, instance=instance)
-        serializer.is_valid(raise_exception=True)
+        serializer.is_valid()
+        serializer.save()
+
+        return Response(serializer.data)
+
+    def put_like(self, request, *args, **kwargs):
+        data = request.data
+        instance = Post.objects.get(pk=kwargs['pk'])
+        data['page_id'] = kwargs['pk']
+        serializer = self.serializer_class(data=data, instance=instance)
+        serializer.is_valid()
         serializer.save()
 
         return Response(serializer.data)
 
 
 class PostDeleteView(UpdateAPIView):
-    serializer_class = PostUpdateSerializer
+    serializer_class = PostCreateSerializer
     permission_classes = (PostDeletePermission, IsAuthenticated)
 
     def put(self, request, *args, **kwargs):

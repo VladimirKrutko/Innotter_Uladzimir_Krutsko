@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'user.apps.UserConfig',
     'page.apps.PageConfig',
-    'post.apps.PostConfig'
+    'post.apps.PostConfig',
 ]
 
 MIDDLEWARE = [
