@@ -19,12 +19,18 @@ class PageSerializer(serializers.ModelSerializer):
     def validate(self, data):
 
         if data.get('tag') is not None:
+
             if Tag.objects.filter(name=data['tag']):
                 data['tag'] = Tag.objects.get(name=data['tag'])
             else:
                 tag = Tag(name=data['tag'])
                 tag.save()
                 data['tag'] = tag
+
+        elif data.get('unblock_date') is not None:
+
+            if data['unblock_date'] < datetime.now():
+                raise ValidationError('Incorrect date')
 
         return data
 
