@@ -6,10 +6,11 @@ from django.core import serializers
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import get_object_or_404
 from page.models import Page
+from user.models import User
 from page.permissions import PagePermission, PageBlockPermissions, PageShowPermissions
 from post.models import Post
 import json
-
+from django.core import serializers as dj_ser
 
 class UpdatePageView(UpdateAPIView):
 	serializer_class = PageSerializer
@@ -88,7 +89,7 @@ class ListPagePostView(ListAPIView):
 		return Response(response_json)
 
 
-class ListFollowRequestView(ListPagePostView):
+class ListFollowRequestView(ListAPIView):
 	permission_classes = (PagePermission,)
 	
 	def get(self, request, *args, **kwargs):
@@ -98,3 +99,34 @@ class ListFollowRequestView(ListPagePostView):
 		# print(page_json["follow_requests"])
 		response_json = {'follow_request': page_json[0]['fields']['follow_requests']}
 		return Response(response_json)
+
+
+class SearchPageView(ListAPIView):
+	permission_classes = (IsAuthenticated,)
+
+	def get(self, request, *args, **kwargs):
+		"""
+		Only one parameter for search
+		"""
+		data = request.data
+		if list(data.keys())[0] == 'uuid':
+			page = dj_ser.serialize('json', Page.objects.filter(uuid=data['uuid']))
+
+			return Response({'page': json.loads(page)})
+
+		elif list(data.keys())[0] == 'name':
+			page = dj_ser.serialize('json', Page.objects.filter(name=data['name']))
+
+			return Response({'page': json.loads(page)})
+
+		elif list(data.keys())[0] == 'username':
+			user = dj_ser.serialize('json', User.objects.filter(username=data['username']))
+
+			return Response({'user': json.loads(user)})
+
+		return Response('Not found')
+
+
+
+
+

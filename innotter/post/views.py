@@ -39,7 +39,6 @@ class PostAPIView(ModelViewSet):
                 'page_id': instance.page_id.pk}
         serializer = self.serializer_class(data=data, instance=instance)
         serializer.is_valid()
-        print(serializer.errors)
         serializer.save()
 
         return Response(serializer.data)
