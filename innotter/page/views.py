@@ -71,8 +71,7 @@ class PageViewSet(ViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        return Response(data=
-        {
+        return Response(data={
             'followers': serializer.data['followers'],
             'follow_requests': serializer['follow_requests']
         },

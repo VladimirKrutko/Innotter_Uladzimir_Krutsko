@@ -3,15 +3,16 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import UpdateAPIView, ListAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from user.serializers import LoginSerializer, UserRegistration, \
-    UpdateUserSerializer
+from rest_framework.status import HTTP_200_OK
+
+from user.serializers import LoginSerializer, UserRegistration, UpdateUserSerializer
 from user.renderers import UserJSONRenderer
 from user.permissions import UserUpdatePermission
 from user.models import User
+
 from confluent_kafka import Producer
-import json
-import pika
-import uuid
+import requests
+
 
 producer = Producer({'bootstrap.servers': 'localhost:29092'})
 
@@ -61,47 +62,11 @@ class UpdateUserAPIView(UpdateAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class StatisticClient:
-    def __init__(self):
-        self.corr_id = None
-        self.response = None
-        self.connection = pika.BlockingConnection(pika.ConnectionParameters("localhost"))
-
-        self.channel = self.connection.channel()
-        result = self.channel.queue_declare(queue="statistic")
-        self.callback_queue = result.method.queue
-        self.channel.basic_consume(on_message_callback=self.on_response, queue=self.callback_queue)
-
-    def on_response(self, ch, method, props, body):
-        if self.corr_id == props.correlation_id:
-            print(body)
-            self.response = body
-
-    def call(self, user_email):
-        self.response = None
-        self.corr_id = str(uuid.uuid4())
-
-        self.channel.basic_publish(exchange='',
-                                   routing_key="statistic",
-                                   properties=pika.BasicProperties(
-                                       reply_to=self.callback_queue,
-                                       correlation_id=self.corr_id,
-                                   ),
-                                   body=user_email)
-        print("responce before while ", self.response)
-        while self.response is None:
-            self.connection.process_data_events()
-            print(self.response)
-        return self.response
-
-
-user_statistic = StatisticClient()
-
-
 class UserStatistic(ListAPIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
-        responce= user_statistic.call(request.user.email)
-        print(responce)
-        return Response(responce)
+        email = request.user.email
+        stat_url = f'http://127.0.0.1:8000//get_user_stat/{email}'
+        user_stat = requests.get(url=email)
+        return Response(data=user_stat, status=HTTP_200_OK)

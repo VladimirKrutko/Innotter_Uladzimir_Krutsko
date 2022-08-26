@@ -1,7 +1,6 @@
 from typing import List, Dict, Tuple
+
 import psycopg2 as psycopg
-import pika
-import json
 
 
 class GetStatistics:
@@ -40,9 +39,7 @@ class GetStatistics:
         )
         return conn
 
-    def _query_render(
-            self, query_result: List[tuple], keys: Tuple[str, ...]
-    ) -> List[Dict]:
+    def _query_render(self, query_result: List[tuple], keys: Tuple[str, ...]) -> List[Dict]:
         """
         Function to transform list of tuples to list of dicts
         """
@@ -53,8 +50,8 @@ class GetStatistics:
         return json_query
 
     def execute_query(self, query):
-        print('execute')
         with self.connection() as conn:
+
             with conn.cursor() as cur:
                 cur.execute(query)
                 query_result = cur.fetchall()
@@ -67,26 +64,3 @@ class GetStatistics:
         likes_count = self.execute_query(self.LIKES_STATISTIC.format(email))
         result = {"post_count": post_count[0], "likes_count": likes_count}
         return result
-
-
-statistic_class = GetStatistics()
-
-connection = pika.BlockingConnection(pika.ConnectionParameters("localhost"))
-channel = connection.channel()
-channel.queue_declare(queue="statistic")
-
-
-def generate_statistic(ch, method, props, body):
-    email = body.decode("utf-8")
-    result_bytes = json.dumps(statistic_class.generate_statistic(email)).encode("utf8")
-    ch.basic_publish(exchange='',
-                     routing_key=props.reply_to,
-                     properties=pika.BasicProperties(correlation_id=props.correlation_id),
-                     body=result_bytes)
-    ch.basic_ack(delivery_tag=method.delivery_tag)
-
-
-channel.basic_qos(prefetch_count=2)
-channel.basic_consume("statistic", generate_statistic)
-print('start_cons')
-channel.start_consuming()
