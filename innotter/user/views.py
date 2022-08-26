@@ -1,3 +1,8 @@
+import json
+import requests
+
+from confluent_kafka import Producer
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -10,9 +15,7 @@ from user.renderers import UserJSONRenderer
 from user.permissions import UserUpdatePermission
 from user.models import User
 
-from confluent_kafka import Producer
-import requests
-
+from statistic_client import StatisticClient
 
 producer = Producer({'bootstrap.servers': 'localhost:29092'})
 
@@ -68,5 +71,17 @@ class UserStatistic(ListAPIView):
     def get(self, request, *args, **kwargs):
         email = request.user.email
         stat_url = f'http://127.0.0.1:8000//get_user_stat/{email}'
-        user_stat = requests.get(url=email)
+        user_stat = requests.get(url=stat_url)
         return Response(data=user_stat, status=HTTP_200_OK)
+
+
+stat_client = StatisticClient()
+
+
+class UserStatRabbit(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, *args, **kwargs):
+        email = request.user.email
+        response = json.loads(stat_client.call(email=email))
+        return Response(data=response, status=HTTP_200_OK)

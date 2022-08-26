@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from generate_statistics import GetStatistics
 
+
 statistics_class = GetStatistics()
 app = FastAPI()
 
