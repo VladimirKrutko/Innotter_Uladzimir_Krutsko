@@ -102,7 +102,7 @@ class PageViewSet(ViewSet):
             json_result = json.loads(dj_ser.serialize('json', filter_data))
             return Response(data=json_result, status=HTTP_200_OK)
 
-        elif data.get('model_name') == 'page':
+        elif data.get('model_name') == 'user':
             filter_objects &= self._get_filter_qs(field_name=data['field_name'], filter_value=data['filter_val'])
             filter_data = all_users.filter(filter_objects)
             json_result = json.loads(dj_ser.serialize('json', filter_data))

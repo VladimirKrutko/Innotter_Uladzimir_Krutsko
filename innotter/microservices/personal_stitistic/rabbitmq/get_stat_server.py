@@ -19,7 +19,6 @@ def get_statistic(email):
 
 def on_request(ch, method, props, body):
     email = body.decode("utf-8")
-    print('got {}'.format(email))
     response = get_statistic(email)
 
     ch.basic_publish(exchange='',
@@ -31,5 +30,4 @@ def on_request(ch, method, props, body):
 channel.basic_qos(prefetch_count=1)
 channel.basic_consume(queue='statistic', on_message_callback=on_request)
 
-print(" [x] Awaiting RPC requests")
 channel.start_consuming()
