@@ -50,7 +50,6 @@ class UserRegistration(serializers.ModelSerializer):
             if key == 'email':
                 continue
             setattr(instance, key, value)
-
         instance.save()
         return instance
 
@@ -103,6 +102,5 @@ class UpdateUserSerializer(serializers.ModelSerializer):
             if key == 'email':
                 continue
             setattr(instance, key, value)
-
         instance.save()
         return instance

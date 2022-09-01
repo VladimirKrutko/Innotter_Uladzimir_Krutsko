@@ -47,4 +47,4 @@ class JWTAuthentication(authentication.BaseAuthentication):
             msg = 'Current user is deactivated'
             raise exceptions.AuthenticationFailed(msg)
 
-        return (user, token)
+        return user, token

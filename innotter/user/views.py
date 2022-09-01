@@ -4,16 +4,17 @@ import requests
 from confluent_kafka import Producer
 
 from rest_framework import status
-from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.status import HTTP_200_OK
 from rest_framework.generics import UpdateAPIView, ListAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.status import HTTP_200_OK
 
-from user.serializers import LoginSerializer, UserRegistration, UpdateUserSerializer
+
+from user.models import User
 from user.renderers import UserJSONRenderer
 from user.permissions import UserUpdatePermission
-from user.models import User
+from user.serializers import LoginSerializer, UserRegistration, UpdateUserSerializer
 
 from statistic_client import StatisticClient
 
