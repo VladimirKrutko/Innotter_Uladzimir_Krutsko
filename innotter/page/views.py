@@ -1,18 +1,18 @@
-from rest_framework.generics import UpdateAPIView, ListAPIView
+from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
-from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.viewsets import ViewSet
+from rest_framework.generics import UpdateAPIView, ListAPIView
+from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK
 
+from django.db.models import Q
 from django.core import serializers
 from django.core import serializers as dj_ser
-from django.db.models import Q
 
 from page.models import Page
+from post.models import Post
 from user.models import User
 from page.permissions import PagePermission, PageBlockPermissions, PageShowPermissions
-from post.models import Post
 from page.serializers import PageSerializer, PagePublicSerializer, PagePrivateSerializer
 
 import json
@@ -71,10 +71,10 @@ class PageViewSet(ViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        return Response(data={
-            'followers': serializer.data['followers'],
-            'follow_requests': serializer['follow_requests']
-        },
+        return Response(
+            data={
+                'followers': serializer.data['followers'],
+                'follow_requests': serializer['follow_requests']},
             status=HTTP_200_OK)
 
     def _get_filter_qs(self, field_name, filter_value):

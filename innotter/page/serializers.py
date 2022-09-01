@@ -1,9 +1,11 @@
-from rest_framework import serializers
-from page.models import Page, Tag
-from user.models import User
-from rest_framework.serializers import ValidationError
 from datetime import datetime
+
+from user.models import User
+from page.models import Page, Tag
+
+from rest_framework import serializers
 from django.core import serializers as django_ser
+from rest_framework.serializers import ValidationError
 
 
 class PageSerializer(serializers.ModelSerializer):
@@ -19,7 +21,6 @@ class PageSerializer(serializers.ModelSerializer):
     def validate(self, data):
 
         if data.get('tag') is not None:
-
             if Tag.objects.filter(name=data['tag']):
                 data['tag'] = Tag.objects.get(name=data['tag'])
             else:
@@ -28,10 +29,8 @@ class PageSerializer(serializers.ModelSerializer):
                 data['tag'] = tag
 
         elif data.get('unblock_date') is not None:
-
             if data['unblock_date'] < datetime.now():
                 raise ValidationError('Incorrect date')
-
         return data
 
     def create(self, validated_data):
@@ -42,9 +41,7 @@ class PageSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         for key, value in validated_data.items():
             setattr(instance, key, value)
-
         instance.save()
-
         return instance
 
     @staticmethod
@@ -71,10 +68,8 @@ class BlockPageSerializer(serializers.Serializer):
     def validate(self, data):
         if len(data.keys()) > 1:
             raise ValidationError('Incorrect number of fields (only unblock_date)')
-
-        if data['unblock_date'] < datetime.now():
+        elif data['unblock_date'] < datetime.now():
             raise ValidationError('Incorrect date')
-
         return data
 
     def update(self, instance, validated_data):
@@ -122,7 +117,6 @@ class PagePrivateSerializer(serializers.Serializer):
                                                 for user in data.get('follow_requests')]
         elif data.get('unblock_date') is not None:
             raise ValidationError('You can not block page')
-
         return validate_data
 
     def update(self, instance, validated_data):
@@ -137,7 +131,5 @@ class PagePrivateSerializer(serializers.Serializer):
         elif validated_data.get('follow_requests'):
             for user_id in validated_data.get('follow_requests'):
                 instance.follow_requests.add(user_id)
-
         instance.save()
-
         return instance
