@@ -8,7 +8,5 @@ urlpatterns = [
     path('delete_post/<int:pk>/', PostDeleteView.as_view()),
     path('update_post/<int:pk>/', PostAPIView.as_view({'put': 'update'})),
     path('put_like/<int:pk>/', PostAPIView.as_view({'put': 'put_like'}))
-    # path('public_follower/', )
-    # path('postcrud/<int:pk>', PostCRUDView.as_view())
 ]
 

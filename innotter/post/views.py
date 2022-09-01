@@ -1,13 +1,14 @@
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.generics import UpdateAPIView
 from post.serializers import PostCreateSerializer
 from post.permissions import PostUpdatePermission, PostDeletePermission
-from rest_framework.permissions import IsAuthenticated
-from post.models import Post
+
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.generics import UpdateAPIView
 from rest_framework.exceptions import APIException
+from rest_framework.permissions import IsAuthenticated
+
+from post.models import Post
 from user.models import User
-# from post.tasks import send_email
 
 
 class PostAPIView(ModelViewSet):
@@ -30,7 +31,6 @@ class PostAPIView(ModelViewSet):
         serializer = self.serializer_class(data=data, instance=instance)
         serializer.is_valid()
         serializer.save()
-
         return Response(serializer.data)
 
     def put_like(self, request, *args, **kwargs):
@@ -40,7 +40,6 @@ class PostAPIView(ModelViewSet):
         serializer = self.serializer_class(data=data, instance=instance)
         serializer.is_valid()
         serializer.save()
-
         return Response(serializer.data)
 
 
@@ -59,5 +58,4 @@ class PostDeleteView(UpdateAPIView):
         serializer = self.serializer_class(data=data, instance=instance)
         serializer.is_valid()
         serializer.save()
-
         return Response(serializer.data)
