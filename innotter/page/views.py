@@ -82,7 +82,7 @@ class PageViewSet(ViewSet):
         Function that return filter values from query_set by
         filed_value and filter_value
         """
-        kwargs = {'{}_iexact'.format(field_name): filter_value}
+        kwargs = {'{}'.format(field_name): filter_value}
         return Q(**kwargs)
 
     def search_object(self, request, *args, **kwargs):

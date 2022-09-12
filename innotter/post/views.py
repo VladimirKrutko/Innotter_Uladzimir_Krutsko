@@ -1,14 +1,15 @@
+from post.models import Post
+from post.tasks import send_email
 from post.serializers import PostCreateSerializer
 from post.permissions import PostUpdatePermission, PostDeletePermission
+
+from user.models import User
 
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import UpdateAPIView
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated
-
-from post.models import Post
-from user.models import User
 
 
 class PostAPIView(ModelViewSet):
@@ -21,6 +22,7 @@ class PostAPIView(ModelViewSet):
         serializer = self.serializer_class(data=data)
         serializer.is_valid()
         serializer.save()
+        send_email.delay(page_id=serializer.data['page_id'])
         return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):

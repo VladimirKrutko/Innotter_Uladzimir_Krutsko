@@ -1,8 +1,8 @@
-from typing import Dict
-from fastapi import FastAPI, File, Form
 import boto3
 import pika
 import json
+from typing import Dict
+from fastapi import FastAPI, File, Form
 
 app = FastAPI()
 
@@ -29,7 +29,6 @@ async def send_link(message: Dict):
 def upload_image(image: bytes = File(...),
                  email: str = Form(...),
                  username: str = Form(...)):
-    print(email)
     image_link = 'user-image' + '' + email.replace('.', '') + '-' + username + '.jpeg'
     image = image
     S3_BUCKET.put_object(Key=image_link, Body=image)

@@ -10,10 +10,10 @@ class PostCreateSerializer(serializers.ModelSerializer):
         fields = ('page_id', 'reply_to', 'content', 'likes', 'is_delete')
 
     def validate(self, data):
-        if data.get('reply_to'):
-            data['reply_to'] = Post.objects.get(pk=data['reply_to'])
-        else:
-            data['reply_to'] = Post.objects.get(pk=-1)
+        # if data.get('reply_to'):
+        #     data['reply_to'] = Post.objects.get(pk=data['reply_to']).pk
+        # else:
+        #     data['reply_to'] = Post.objects.get(pk=-1).pk
         return data
 
     def create(self, validated_data):

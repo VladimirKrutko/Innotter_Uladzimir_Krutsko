@@ -16,7 +16,7 @@ from user.renderers import UserJSONRenderer
 from user.permissions import UserUpdatePermission
 from user.serializers import LoginSerializer, UserRegistration, UpdateUserSerializer
 
-from statistic_client import StatisticClient
+from user.statistic_client import StatisticClient
 
 producer = Producer({'bootstrap.servers': 'localhost:29092'})
 

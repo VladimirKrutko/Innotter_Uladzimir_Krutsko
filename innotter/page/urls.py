@@ -1,8 +1,5 @@
 from django.urls import path
-from page.views import (UpdatePageView, AddFollowersPrivatePage, AddFollowersPublicPage,
-                        ListPagesView, BlockPageView, ListPagePostView, ListFollowRequestView,
-                        SearchPageView, )
-from page.views import PageViewSet
+from page.views import BlockPageView, ListPagePostView, PageViewSet
 
 app_name = 'page'
 
