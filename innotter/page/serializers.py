@@ -110,7 +110,8 @@ class PagePrivateSerializer(serializers.Serializer):
         validate_data = {}
         if data.get('followers'):
             validate_data['followers'] = [User.objects.get(email=user.get('email'))
-                                          for user in data.get('followers')]
+                                          for user
+                                          in data.get('followers')]
 
         elif data.get('follow_requests') is not None:
             validate_data['follow_requests'] = [User.objects.get(email=user.get('email')).id

@@ -2,8 +2,10 @@ from confluent_kafka import Consumer
 from innotter.microservices.statistics.view import load_statistic
 import json
 
-consumer = Consumer({'bootstrap.servers': 'localhost:29092', 'group.id': 'innotter',
-                     'auto.offset.reset': 'earliest'})
+consumer = Consumer({'bootstrap.servers': 'localhost:29092',
+                     'group.id': 'innotter',
+                     'auto.offset.reset': 'earliest'
+                     })
 
 consumer.subscribe(['user-stat'])
 

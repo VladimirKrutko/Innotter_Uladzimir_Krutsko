@@ -20,3 +20,4 @@
 /innotter/post/migrations/0003_alter_post_likes.py
 /innotter/post/migrations/0004_alter_post_likes.py
 /innotter/page/migrations/__init__.py
+/innotter/.idea/

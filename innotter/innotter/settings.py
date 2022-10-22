@@ -14,12 +14,9 @@ from pathlib import Path
 import boto3
 
 
-# CELERY_BROKER_URL = 'amqp://guest:guest@rabbitmq:15672/0'
 CELERY_BROKER_URL = 'amqp://localhost'
-# CELERY_RESULT_BACKEND = 'amqp://localhost:5672:5672/0'
 
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 AUTH_USER_MODEL = 'user.User'
@@ -83,16 +80,6 @@ WSGI_APPLICATION = 'innotter.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'postgres',
-#         'USER': 'postgres',
-#         'PASSWORD': 'postgres',
-#         'HOST': 'pgdb',
-#         'PORT': 5432,
-#     }
-# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -146,9 +133,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-AWS_BASE_STORAGE = 'innotter-uladzimir-krutsko/user-image/'
-AWS_ACCESS_KEY_ID = 'AKIA46GRRWDGRIFQIK7L'
-AWS_SECRET_ACCESS_KEY = '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'
+AWS_BASE_STORAGE = ''
+AWS_ACCESS_KEY_ID = ''
+AWS_SECRET_ACCESS_KEY = ''
 AWS_STORAGE_BUCKET_NAME = 'innotter-uladzimir-krutsko'
 
 S3_RESOURCE = boto3.resource('s3', aws_access_key_id=AWS_ACCESS_KEY_ID,
