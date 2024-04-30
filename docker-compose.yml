@@ -4,9 +4,6 @@ services:
     django:
         build: .
         container_name: django
-        # python innotter/manage.py migrate
-        # command: python innotter/manage.py makemigrations
-#        command: bash -c "python innotter/manage.py makemigrations user && python innotter/manage.py makemigr>
         command: ['./entrypoint.sh']
         volumes:
             - .:/usr/src/app
@@ -21,3 +18,13 @@ services:
         - POSTGRES_DB=postgres
         - POSTGRES_USER=postgres
         - POSTGRES_PASSWORD=postgres
+    tests:
+        build:
+            context: .
+            dockerfile: Dockerfile.test
+        container_name: django-tests
+        volumes:
+            - .:/usr/src/app
+        depends_on:
+            - django
+            - pgdb
