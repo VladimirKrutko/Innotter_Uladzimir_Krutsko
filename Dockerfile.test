@@ -4,6 +4,6 @@ COPY . /usr/src/app
 WORKDIR /usr/src/app
 RUN ls -a
 RUN pip freeze
-RUN pip install jwt
+# RUN pip install jwt
 
 CMD ["python3", "innotter/manage.py", "test"]
