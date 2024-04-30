@@ -19,7 +19,6 @@ services:
             - POSTGRES_USER=postgres
             - POSTGRES_PASSWORD=postgres
     tests:
-        image: django
         container_name: django-tests
         dockerfile: Dockerfile.test
         volumes:
