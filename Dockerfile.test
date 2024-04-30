@@ -6,4 +6,4 @@ RUN ls -a
 RUN pip freeze
 # RUN pip install -r requarements.txt
 
-CMD ["python3", "manage.py", "test"]
+CMD ["python3", "innotter/manage.py", "test"]
