@@ -6,6 +6,6 @@ FROM django
 
 COPY . /usr/src/app
 
-RUN pip3 install -r /usr/src/app/requirements.txt
+# RUN pip3 install -r /usr/src/app/requirements.txt
 
 CMD ["python3", "manage.py", "test"]
