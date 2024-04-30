@@ -29,4 +29,4 @@ services:
             - django
             - pgdb
         tty: true
-        command: ["python3", "manage.py", "test"]
+        command: ["python3", "innotter/manage.py", "test"]
