@@ -1,6 +1,6 @@
 from django.contrib.auth.models import PermissionsMixin, AbstractUser
 from django.db import models
-import jwt
+# import jwt
 from datetime import datetime, timedelta
 from django.conf import settings
 
@@ -38,19 +38,19 @@ class User(AbstractUser, PermissionsMixin):
     def get_role(self) -> models.CharField:
         return self.role
 
-    @property
-    def token(self):
-        return self._generate_jwt_token()
+    # @property
+    # def token(self):
+    #     return self._generate_jwt_token()
 
-    def _generate_jwt_token(self):
-        dt = datetime.now() + timedelta(days=1)
+    # def _generate_jwt_token(self):
+    #     dt = datetime.now() + timedelta(days=1)
 
-        token = jwt.encode({
-            'id': self.pk,
-            'exp': int(dt.strftime('%s'))
-        }, settings.SECRET_KEY, algorithm='HS256')
+    #     token = jwt.encode({
+    #         'id': self.pk,
+    #         'exp': int(dt.strftime('%s'))
+    #     }, settings.SECRET_KEY, algorithm='HS256')
 
-        return token
+    #     return token
 
 
 class UploadImage(models.Model):
