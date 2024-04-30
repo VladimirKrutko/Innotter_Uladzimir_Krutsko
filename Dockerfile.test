@@ -1,4 +1,4 @@
-FROM innotter_uladzimir_krutsko_django
+FROM clonegithub_django
 
 COPY . /usr/src/app
 WORKDIR /usr/src/app
