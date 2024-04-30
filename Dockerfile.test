@@ -1,9 +1,12 @@
 FROM django
 
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY . /usr/src/app
-WORKDIR /usr/src/app
-RUN ls -a
-RUN pip freeze
-# RUN pip install jwt
+
+RUN pip3 install -r /usr/src/app/requirements.txt
 
 CMD ["python3", "innotter/manage.py", "test"]

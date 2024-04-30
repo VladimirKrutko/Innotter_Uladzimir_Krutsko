@@ -15,14 +15,13 @@ services:
         image: postgres
         container_name: pgdb
         environment:
-        - POSTGRES_DB=postgres
-        - POSTGRES_USER=postgres
-        - POSTGRES_PASSWORD=postgres
+            - POSTGRES_DB=postgres
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
     tests:
-        build:
-            context: .
-            dockerfile: Dockerfile.test
+        image: django
         container_name: django-tests
+        dockerfile: Dockerfile.test
         volumes:
             - .:/usr/src/app
         depends_on:
