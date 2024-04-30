@@ -1,7 +1,8 @@
 FROM django
 
 COPY . /usr/src/app
-RUN pip install -r requarements.txt
+RUN ls -a
 WORKDIR /usr/src/app/innotter
+RUN pip install -r requarements.txt
 
 CMD ["python3", "manage.py", "test"]
