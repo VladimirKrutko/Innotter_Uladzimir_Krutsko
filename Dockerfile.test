@@ -11,4 +11,4 @@ RUN pip install -r requarements.txt
 RUN ls 
 # RUN chmod +x entrypoint.sh
 
-RUN python innotter/manage.py test
+RUN python ./innotter/manage.py test
