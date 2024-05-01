@@ -18,13 +18,14 @@ pipeline{
         }
         stage ('Start container'){
             steps{
-                sh 'docker-compose up -d --no-color --wait'
+                sh 'docker-compose up -d'
                 sh 'dcocker ps'
             }
         }
-    post 
-    always{
-        sh 'curl http://localhost:8080/admin'
-    }
+        stage ('Run tests'){
+            steps{
+                sh 'curl http://localhost:8080/admin'
+            }
+        }
     }
 }
