@@ -2,8 +2,8 @@ FROM django:latest
 
 COPY . /usr/src/app
 WORKDIR /usr/src/app
-
-CMD ["python3", "innotter/manage.py", "test"]
+RUN ls
+RUN python3 innotter/manage.py test
 # RUN echo "Creating test database for alias 'default'..."
 # RUN echo "System check identified no issues (0 silenced)." 
 # RUN echo "....."
