@@ -11,8 +11,6 @@ services:
             - "8000:8000"
         depends_on:
             - pgdb
-        networks:
-            - my_network
     pgdb:
         image: postgres
         container_name: pgdb
@@ -20,8 +18,7 @@ services:
         - POSTGRES_DB=postgres
         - POSTGRES_USER=postgres
         - POSTGRES_PASSWORD=postgres
-        networks:
-            - my_network
+        hostname: pgdb
     tests:
         build:
             context: .
@@ -34,7 +31,3 @@ services:
             - pgdb
         tty: true
         command: ["python3", "innotter/manage.py", "test"]
-        networks:
-            - my_network
-networks:
-    my_network:
