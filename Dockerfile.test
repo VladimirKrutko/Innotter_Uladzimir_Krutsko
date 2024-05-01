@@ -3,4 +3,3 @@ FROM django:latest
 COPY . /usr/src/app
 WORKDIR /usr/src/app
 RUN echo "2/2 passed"
-# asd
