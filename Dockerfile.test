@@ -8,5 +8,7 @@ COPY requarements.txt ./
 COPY entrypoint.sh /usr/src/app
 
 RUN pip install -r requarements.txt
-RUN chmod +x entrypoint.sh
+RUN ls 
+# RUN chmod +x entrypoint.sh
+
 RUN python innotter/manage.py test
