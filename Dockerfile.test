@@ -1,4 +1,4 @@
-FROM clonegithub_django
+FROM django
 
 COPY . /usr/src/app
 WORKDIR /usr/src/app
