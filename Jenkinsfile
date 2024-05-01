@@ -11,5 +11,21 @@ pipeline{
                 '''
             }
         }
+        stage ('Prune Dokce data'){
+            steps{
+                sh 'docker system prune -f -a --volumes'
+            }
+        }
+        stage ('Start container'){
+            steps{
+                sh 'docker-compose up -d --no-color --wait'
+                sh 'dcocker ps'
+            }
+        }
+        stage ('Run tests'){
+            steps{
+                sh 'curl http://localhost:8080/admin'
+            }
+        }
     }
 }
