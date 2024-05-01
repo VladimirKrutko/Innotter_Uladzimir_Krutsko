@@ -13,13 +13,14 @@ pipeline{
         }
         stage ('Prune Dokce data'){
             steps{
+                sh 'docker stop $(docker ps -q)'
                 sh 'docker system prune -a'
             }
         }
         stage ('Start container'){
             steps{
                 sh 'docker-compose up -d'
-                sh 'dcocker ps'
+                sh 'docker ps'
             }
         }
         stage ('Run tests'){
