@@ -3,11 +3,11 @@ FROM django
 COPY . /usr/src/app
 WORKDIR /usr/src/app
 
-# CMD ["python3", "innotter/manage.py", "test"]
-RUN echo "Creating test database for alias 'default'..."
-RUN echo "System check identified no issues (0 silenced)." 
-RUN echo "....."
-RUN echo "----------------------------------------------------------------------"
-RUN echo "Ran 5 tests in 0.032s"
-RUN echo ""
-RUN echo "OK"
+CMD ["python3", "innotter/manage.py", "test"]
+# RUN echo "Creating test database for alias 'default'..."
+# RUN echo "System check identified no issues (0 silenced)." 
+# RUN echo "....."
+# RUN echo "----------------------------------------------------------------------"
+# RUN echo "Ran 5 tests in 0.032s"
+# RUN echo ""
+# RUN echo "OK"
