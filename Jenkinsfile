@@ -22,10 +22,9 @@ pipeline{
                 sh 'dcocker ps'
             }
         }
-        stage ('Run tests'){
-            steps{
-                sh 'curl http://localhost:8080/admin'
-            }
-        }
+    post 
+    always{
+        sh 'curl http://localhost:8080/admin'
+    }
     }
 }
