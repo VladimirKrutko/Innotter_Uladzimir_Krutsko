@@ -1,13 +1,12 @@
-FROM django:latest
+FROM python:3.10.5
 
-COPY . /usr/src/app
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
 WORKDIR /usr/src/app
-RUN ls
-# RUN python3 innotter/manage.py test
-# RUN echo "Creating test database for alias 'default'..."
-# RUN echo "System check identified no issues (0 silenced)." 
-# RUN echo "....."
-# RUN echo "----------------------------------------------------------------------"
-# RUN echo "Ran 5 tests in 0.032s"
-# RUN echo ""
-# RUN echo "OK"
+ADD innotter  ./
+COPY requarements.txt ./
+COPY entrypoint.sh /usr/src/app
+
+RUN pip install -r requarements.txt
+RUN chmod +x entrypoint.sh
+RUN python innotter/manage.py test
