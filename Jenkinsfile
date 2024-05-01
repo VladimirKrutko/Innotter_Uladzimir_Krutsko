@@ -13,7 +13,7 @@ pipeline{
         }
         stage ('Prune Dokce data'){
             steps{
-                // sh 'docker stop $(docker ps -q)'
+                sh 'docker stop $(docker ps -q)'
                 sh 'docker system prune -a'
             }
         }
