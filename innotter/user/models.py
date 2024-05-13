@@ -1,6 +1,6 @@
 from django.contrib.auth.models import PermissionsMixin, AbstractUser
 from django.db import models
-import jwt
+# import jwt
 from datetime import datetime, timedelta
 from django.conf import settings
 
@@ -10,17 +10,17 @@ class User(AbstractUser, PermissionsMixin):
     User model in innoter project
     """
 
-    class Roles(models.TextChoices):
-        """
-        Class with user roles
-        """
-        USER = 'user'
-        MODERATOR = 'moderator'
-        ADMIN = 'admin'
+    # class Roles(models.TextChoices):
+    #     """
+    #     Class with user roles
+    #     """
+    #     USER = 'user'
+    #     MODERATOR = 'moderator'
+    #     ADMIN = 'admin'
 
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=200)
-    role = models.CharField(max_length=9, choices=Roles.choices, default='user')
+    # role = models.CharField(max_length=9, choices=Roles.choices, default='user')
     create_data = models.DateTimeField(auto_now=True)
     last_login = models.DateTimeField(auto_now=True)
     is_blocked = models.BooleanField(default=False)
@@ -38,19 +38,19 @@ class User(AbstractUser, PermissionsMixin):
     def get_role(self) -> models.CharField:
         return self.role
 
-    @property
-    def token(self):
-        return self._generate_jwt_token()
+    # @property
+    # def token(self):
+    #     return self._generate_jwt_token()
 
-    def _generate_jwt_token(self):
-        dt = datetime.now() + timedelta(days=1)
+    # def _generate_jwt_token(self):
+    #     dt = datetime.now() + timedelta(days=1)
 
-        token = jwt.encode({
-            'id': self.pk,
-            'exp': int(dt.strftime('%s'))
-        }, settings.SECRET_KEY, algorithm='HS256')
+    #     token = jwt.encode({
+    #         'id': self.pk,
+    #         'exp': int(dt.strftime('%s'))
+    #     }, settings.SECRET_KEY, algorithm='HS256')
 
-        return token
+    #     return token
 
 
 class UploadImage(models.Model):
